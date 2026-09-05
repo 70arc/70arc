@@ -35,7 +35,7 @@ export default function Breadcrumbs() {
   return (
     <nav 
       aria-label="Breadcrumb" 
-      className="px-4 sm:px-6 lg:px-12 pt-24 pb-4"
+      className="px-4 sm:px-6 lg:px-12 pt-[5.75rem] sm:pt-24 pb-2"
     >
       <ol 
         className="flex items-center gap-2 text-sm max-w-7xl mx-auto"

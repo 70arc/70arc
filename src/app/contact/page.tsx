@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
@@ -10,12 +11,36 @@ import { fadeUpVariant, staggerContainerVariant, staggerItemVariant } from "@/ap
 import { isValidEmail, sanitizeInput, cn } from "@/app/lib/utils";
 
 export default function ContactPage() {
+  return (
+    <Suspense fallback={<ContactPageFallback />}>
+      <ContactPageContent />
+    </Suspense>
+  );
+}
+
+function ContactPageFallback() {
+  return (
+    <main id="main-content" className="min-h-dvh bg-warm-white overflow-x-clip">
+      <Header />
+      <Breadcrumbs />
+      <section className="page-hero">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="h-10" />
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function ContactPageContent() {
+  const searchParams = useSearchParams();
+  const position = searchParams.get("position");
   const [formState, setFormState] = useState({
     name: "",
     email: "",
     company: "",
-    reason: "general",
-    message: "",
+    reason: position ? "careers" : "general",
+    message: position ? `I am applying for the ${position} role.` : "",
     website: "", // Honeypot field - should remain empty
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -66,7 +91,7 @@ export default function ContactPage() {
     }
     
     // Sanitize inputs
-    const sanitizedData = {
+    void {
       name: sanitizeInput(formState.name),
       email: sanitizeInput(formState.email),
       company: sanitizeInput(formState.company),
@@ -74,7 +99,7 @@ export default function ContactPage() {
       message: sanitizeInput(formState.message),
     };
     
-    // Simulate API call (in production, send to actual endpoint)
+    // Simulate API call (in production, send sanitized payload to actual endpoint)
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     // Form data is ready for submission - send to your backend API
@@ -96,12 +121,12 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen bg-warm-white">
+    <main id="main-content" className="min-h-dvh bg-warm-white overflow-x-clip">
       <Header />
       <Breadcrumbs />
 
       {/* Hero Section */}
-      <section className="pt-28 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-12">
+      <section className="page-hero">
         <div className="max-w-4xl mx-auto text-center">
           <motion.span
             className="inline-block px-4 py-2 rounded-full glass-card text-sm text-safety-orange font-medium mb-6 sm:mb-8"
@@ -111,7 +136,7 @@ export default function ContactPage() {
             {contactPage.hero.badge}
           </motion.span>
           <motion.h1
-            className="font-serif text-4xl sm:text-5xl lg:text-7xl mb-6 sm:mb-8"
+            className="site-h1 mb-6 sm:mb-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -121,7 +146,7 @@ export default function ContactPage() {
             <span className="text-safety-orange">{contactPage.hero.titleAccent}</span>
           </motion.h1>
           <motion.p
-            className="text-lg sm:text-xl text-charcoal/70 leading-relaxed max-w-2xl mx-auto"
+            className="site-lede mx-auto"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -132,12 +157,12 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Form & Info */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-12">
+      <section className="site-section pt-4 sm:pt-8">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Contact Form */}
             <motion.div
-              className="glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 order-2 lg:order-1"
+              className="glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12"
               variants={fadeUpVariant}
               initial="initial"
               whileInView="animate"
@@ -148,12 +173,12 @@ export default function ContactPage() {
                   <motion.form
                     key="form"
                     onSubmit={handleSubmit}
-                    className="space-y-5 sm:space-y-6"
+                    className="relative space-y-5 sm:space-y-6"
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     noValidate
                   >
-                    <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl mb-4 sm:mb-6 text-charcoal dark:text-white">
+                    <h2 className="site-h3 lg:text-3xl mb-4 sm:mb-6 text-charcoal dark:text-white">
                       {contactPage.form.title}
                     </h2>
 
@@ -226,7 +251,7 @@ export default function ContactPage() {
                     </div>
 
                     {/* Honeypot field - hidden from users, bots will fill this */}
-                    <div className="absolute -left-[9999px]" aria-hidden="true">
+                    <div className="sr-only" aria-hidden="true">
                       <label htmlFor="website">Website</label>
                       <input
                         type="text"
@@ -336,14 +361,13 @@ export default function ContactPage() {
 
             {/* Office Locations */}
             <motion.div
-              className="order-1 lg:order-2"
               variants={fadeUpVariant}
               initial="initial"
               whileInView="animate"
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              <h2 className="font-serif text-xl sm:text-2xl lg:text-3xl mb-6 sm:mb-8">Our Offices</h2>
+              <h2 className="site-h3 lg:text-3xl mb-6 sm:mb-8">Our Offices</h2>
 
               <motion.div 
                 className="space-y-4 sm:space-y-6"
@@ -426,10 +450,10 @@ export default function ContactPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-12 bg-charcoal/5">
+      <section className="site-section bg-charcoal/5">
         <div className="max-w-3xl mx-auto">
           <motion.h2
-            className="font-serif text-3xl sm:text-4xl lg:text-5xl text-center mb-4 sm:mb-6"
+            className="site-section-title"
             variants={fadeUpVariant}
             initial="initial"
             whileInView="animate"
@@ -438,7 +462,7 @@ export default function ContactPage() {
             Frequently Asked
           </motion.h2>
           <motion.p
-            className="text-center text-charcoal/60 mb-8 sm:mb-12"
+            className="site-section-copy"
             variants={fadeUpVariant}
             initial="initial"
             whileInView="animate"

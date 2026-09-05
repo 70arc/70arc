@@ -10,9 +10,20 @@ import { cn } from "@/app/lib/utils";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  const [menuState, setMenuState] = useState({ open: false, path: pathname });
+  const isMenuOpen = menuState.open && menuState.path === pathname;
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuState((prev) =>
+      prev.open && prev.path === pathname
+        ? { open: false, path: pathname }
+        : { open: true, path: pathname }
+    );
+  };
+
+  const closeMenu = () => setMenuState({ open: false, path: pathname });
 
   // Handle scroll effect
   useEffect(() => {
@@ -23,11 +34,6 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  // Close menu on route change
-  useEffect(() => {
-    setIsMenuOpen(false);
-  }, [pathname]);
 
   // Prevent body scroll when menu is open
   useEffect(() => {
@@ -41,6 +47,20 @@ export default function Header() {
     };
   }, [isMenuOpen]);
 
+  // Close mobile menu on Escape
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuState({ open: false, path: pathname });
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown, true);
+    return () => document.removeEventListener("keydown", handleKeyDown, true);
+  }, [isMenuOpen, pathname]);
+
   return (
     <header 
       className={cn(
@@ -51,7 +71,7 @@ export default function Header() {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         <motion.div
           className={cn(
-            "rounded-full px-4 sm:px-6 py-1 flex items-center justify-between transition-all duration-300",
+            "relative z-20 rounded-full px-4 sm:px-6 py-1 flex items-center justify-between transition-all duration-300",
             isScrolled 
               ? "glass-card shadow-lg" 
               : "glass-card-light"
@@ -63,7 +83,7 @@ export default function Header() {
           {/* Logo */}
           <Link 
             href="/" 
-            className="flex items-center hover:opacity-80 transition-opacity"
+            className="flex items-center min-w-0 shrink-0 hover:opacity-80 transition-opacity"
             aria-label={`${brand.name} - Home`}
           >
             {brand.logoImage ? (
@@ -83,13 +103,13 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-4 lg:gap-6">
+          <div className="hidden md:flex items-center gap-3 lg:gap-6 min-w-0">
             {navigation.main.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "text-sm font-medium transition-colors relative group",
+                  "text-sm font-medium transition-colors relative group whitespace-nowrap",
                   pathname === link.href
                     ? "text-safety-orange"
                     : "text-charcoal/70 dark:text-white/70 hover:text-charcoal dark:hover:text-white"
@@ -121,9 +141,10 @@ export default function Header() {
             <ThemeToggle />
             <button
               className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/20 dark:hover:bg-white/10 transition-colors"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={toggleMenu}
               aria-label={isMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={isMenuOpen}
+              aria-controls="mobile-navigation"
             >
               <div className="relative w-6 h-5 flex flex-col justify-between">
                 <motion.span
@@ -155,24 +176,24 @@ export default function Header() {
         {/* Mobile Menu */}
         <AnimatePresence>
           {isMenuOpen && (
-            <>
+            <motion.div
+              key="mobile-menu"
+              className="md:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
               {/* Backdrop */}
-              <motion.div
-                className="fixed inset-0 bg-charcoal/20 dark:bg-black/40 backdrop-blur-sm md:hidden"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setIsMenuOpen(false)}
-                style={{ zIndex: -1 }}
+              <div
+                className="fixed inset-0 z-0 bg-charcoal/20 dark:bg-black/40 backdrop-blur-sm"
+                onClick={closeMenu}
               />
               
               {/* Menu Panel */}
-              <motion.div
-                className="md:hidden mt-4 glass-card rounded-3xl p-6 overflow-hidden"
-                initial={{ opacity: 0, y: -20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+              <div
+                id="mobile-navigation"
+                className="relative z-10 mt-4 glass-card rounded-3xl p-6 overflow-hidden"
               >
                 <nav className="flex flex-col gap-2">
                   {navigation.main.map((link, index) => (
@@ -184,7 +205,7 @@ export default function Header() {
                     >
                       <Link
                         href={link.href}
-                        onClick={() => setIsMenuOpen(false)}
+                        onClick={closeMenu}
                         className={cn(
                           "block text-lg font-medium py-3 px-4 rounded-xl transition-colors",
                           pathname === link.href
@@ -203,15 +224,15 @@ export default function Header() {
                   >
                     <Link
                       href="/contact"
-                      onClick={() => setIsMenuOpen(false)}
+                      onClick={closeMenu}
                       className="block mt-4 px-6 py-3 bg-charcoal dark:bg-white text-white dark:text-charcoal text-center font-medium rounded-full hover:bg-safety-orange dark:hover:bg-safety-orange dark:hover:text-white transition-colors"
                     >
                       Get in Touch
                     </Link>
                   </motion.div>
                 </nav>
-              </motion.div>
-            </>
+              </div>
+            </motion.div>
           )}
         </AnimatePresence>
       </nav>

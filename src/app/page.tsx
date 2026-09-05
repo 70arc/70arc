@@ -7,7 +7,8 @@ import CompassNav from "@/app/components/CompassNav";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import Testimonials from "@/app/components/Testimonials";
-import { homepage, brand, features } from "@/app/lib/content";
+import Image from "next/image";
+import { homepage, features } from "@/app/lib/content";
 import { sanitizeInput } from "@/app/lib/utils";
 
 // Horizontal Bento Grid Gallery
@@ -39,12 +40,13 @@ function BentoGallery({ images }: { images: readonly string[] }) {
       container.scrollLeft = scrollPos;
     };
     
-    const interval = setInterval(animate, 20);
+    let interval = setInterval(animate, 20);
     
-    // Pause on hover
     const handleMouseEnter = () => clearInterval(interval);
     const handleMouseLeave = () => {
       scrollPos = container.scrollLeft;
+      clearInterval(interval);
+      interval = setInterval(animate, 20);
     };
     
     container.addEventListener('mouseenter', handleMouseEnter);
@@ -60,9 +62,9 @@ function BentoGallery({ images }: { images: readonly string[] }) {
   // Create bento layout pattern (alternating sizes)
   const getSize = (index: number) => {
     const pattern = index % 5;
-    if (pattern === 0 || pattern === 3) return 'w-80 h-64'; // Large
-    if (pattern === 1 || pattern === 4) return 'w-64 h-48'; // Medium
-    return 'w-52 h-40'; // Small
+    if (pattern === 0 || pattern === 3) return { width: 320, height: 256, className: 'w-64 sm:w-80 h-48 sm:h-64' };
+    if (pattern === 1 || pattern === 4) return { width: 256, height: 192, className: 'w-56 sm:w-64 h-40 sm:h-48' };
+    return { width: 208, height: 160, className: 'w-44 sm:w-52 h-32 sm:h-40' };
   };
 
   return (
@@ -70,23 +72,27 @@ function BentoGallery({ images }: { images: readonly string[] }) {
       {/* Scrolling Container */}
       <div 
         ref={scrollRef}
-        className="flex gap-4 overflow-x-auto pb-4 px-6 hide-scrollbar scroll-smooth"
+        className="flex gap-4 overflow-x-auto pb-4 px-4 sm:px-6 lg:px-12 hide-scrollbar scroll-smooth"
         style={{ scrollSnapType: 'x mandatory' }}
       >
-        {images.map((src, index) => (
+        {images.map((src, index) => {
+          const size = getSize(index);
+          return (
           <motion.div
             key={index}
-            className={`${getSize(index)} flex-shrink-0 rounded-2xl overflow-hidden cursor-pointer relative group`}
+            className={`${size.className} flex-shrink-0 rounded-2xl overflow-hidden cursor-pointer relative group`}
             style={{ scrollSnapAlign: 'start' }}
             whileHover={{ scale: 1.02, y: -4 }}
             transition={{ type: 'spring', stiffness: 300, damping: 25 }}
             onClick={() => setSelectedImage(src)}
           >
-            <img
+            <Image
               src={src}
               alt={`Gallery image ${index + 1}`}
+              width={size.width}
+              height={size.height}
               className="w-full h-full object-cover"
-              loading="lazy"
+              sizes="(max-width: 640px) 176px, 320px"
             />
             {/* Hover overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -94,7 +100,8 @@ function BentoGallery({ images }: { images: readonly string[] }) {
               View
             </div>
           </motion.div>
-        ))}
+          );
+        })}
       </div>
       
       {/* Scroll hint */}
@@ -106,24 +113,35 @@ function BentoGallery({ images }: { images: readonly string[] }) {
       <AnimatePresence>
         {selectedImage && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setSelectedImage(null)}
           >
-            <motion.img
-              src={selectedImage}
-              alt="Selected gallery image"
-              className="max-w-[90vw] max-h-[80vh] rounded-2xl shadow-2xl"
+            <motion.div
+              className="relative max-w-[90vw] max-h-[80vh] w-[90vw] h-[80vh] rounded-2xl shadow-2xl overflow-hidden"
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{ type: 'spring', damping: 25 }}
-            />
+            >
+              {selectedImage && (
+                <Image
+                  src={selectedImage}
+                  alt="Selected gallery image"
+                  fill
+                  className="object-contain"
+                  sizes="90vw"
+                  priority
+                />
+              )}
+            </motion.div>
             <button
-              className="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
+              type="button"
+              className="absolute top-4 right-4 sm:top-6 sm:right-6 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors"
               onClick={() => setSelectedImage(null)}
+              aria-label="Close gallery image"
             >
               <span className="text-2xl text-white">×</span>
             </button>
@@ -151,9 +169,8 @@ export default function Home() {
     const trimmedValue = inputValue.trim();
     // Validate input length and content
     if (trimmedValue && trimmedValue.length <= 500) {
-      const sanitizedValue = sanitizeInput(trimmedValue);
-      // Form data ready: sanitizedValue
-      // TODO: Send to backend API when implemented
+      void sanitizeInput(trimmedValue);
+      // TODO: Send sanitized transmission to backend API when implemented
       setIsTransmitted(true);
       setTimeout(() => {
         setInputValue("");
@@ -163,7 +180,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-warm-white overflow-x-hidden">
+    <main id="main-content" className="min-h-dvh bg-warm-white overflow-x-clip">
       <Header />
       
       {features.showCompassNav && <CompassNav />}
@@ -171,7 +188,7 @@ export default function Home() {
       {/* Hero Section */}
       <motion.section 
         ref={heroRef}
-        className="relative min-h-screen flex items-center justify-center px-6 overflow-hidden"
+        className="relative min-h-dvh flex items-center justify-center px-4 sm:px-6 lg:px-12 overflow-hidden"
         style={{ opacity: heroOpacity, scale: heroScale }}
       >
         {/* Animated Mesh Gradient Background */}
@@ -184,11 +201,11 @@ export default function Home() {
         </div>
 
         {/* Floating Glass Panes */}
-        <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute inset-0 pointer-events-none hidden md:block">
           {[...Array(5)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-40 md:w-64 h-56 md:h-80 glass-card rounded-3xl"
+              className="absolute w-40 md:w-56 lg:w-64 h-56 md:h-72 lg:h-80 glass-card rounded-3xl"
               initial={{ x: 100, y: 200, rotate: 15, opacity: 0 }}
               animate={{ 
                 x: 0, 
@@ -211,7 +228,7 @@ export default function Home() {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 text-center max-w-5xl">
+        <div className="relative z-10 text-center max-w-5xl mx-auto">
           <motion.span
             className="inline-block px-4 py-2 rounded-full glass-card text-sm text-safety-orange font-medium mb-6 md:mb-8"
             initial={{ opacity: 0, y: 20 }}
@@ -222,7 +239,7 @@ export default function Home() {
           </motion.span>
 
           <motion.h1
-            className="font-serif text-6xl sm:text-7xl md:text-8xl lg:text-9xl mb-6 md:mb-8"
+            className="site-display mb-6 md:mb-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9 }}
@@ -231,7 +248,7 @@ export default function Home() {
           </motion.h1>
 
           <motion.p
-            className="text-lg md:text-xl lg:text-2xl max-w-2xl mx-auto leading-relaxed opacity-70"
+            className="site-lede mx-auto text-lg md:text-xl"
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.7 }}
             transition={{ delay: 1.1 }}
@@ -257,18 +274,18 @@ export default function Home() {
       </motion.section>
 
       {/* Capabilities Section */}
-      <section id="capabilities" className="relative py-20 md:py-32 px-4 md:px-6">
-        <div className="max-w-7xl mx-auto">
+      <section id="capabilities" className="relative site-section">
+        <div className="site-container !px-0">
           <motion.h2
-            className="font-serif text-4xl md:text-6xl lg:text-7xl text-center mb-16 md:mb-24"
-            initial={{ opacity: 0, y: 50 }}
+            className="site-section-title mb-10 sm:mb-14 lg:mb-16"
+            initial={{ opacity: 1, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
             Capabilities
           </motion.h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {homepage.capabilities.map((capability, index) => (
               <FloatingCard
                 key={capability.title}
@@ -284,10 +301,10 @@ export default function Home() {
       </section>
 
       {/* Synthesis Gallery Section */}
-      <section id="atmosphere" className="relative min-h-screen py-32 px-6 overflow-hidden">
+      <section id="atmosphere" className="relative site-section overflow-hidden">
         <motion.h2
-          className="font-serif text-5xl md:text-7xl text-center mb-8"
-          initial={{ opacity: 0, y: 50 }}
+          className="site-section-title"
+          initial={{ opacity: 1, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
@@ -295,8 +312,8 @@ export default function Home() {
         </motion.h2>
         
         <motion.p
-          className="text-center opacity-60 mb-12 max-w-xl mx-auto"
-          initial={{ opacity: 0 }}
+          className="site-section-copy"
+          initial={{ opacity: 0.6 }}
           whileInView={{ opacity: 0.6 }}
           viewport={{ once: true }}
         >
@@ -307,24 +324,24 @@ export default function Home() {
       </section>
 
       {/* Telemetry Section - NO ROTATION */}
-      <section id="telemetry" className="relative py-32 px-6 flex items-center justify-center min-h-screen">
+      <section id="telemetry" className="relative site-section flex items-center justify-center overflow-hidden">
         {/* Animated gradient blob background */}
         <div className="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none">
-          <div className="absolute w-[600px] h-[600px] bg-safety-orange/30 rounded-full blur-3xl animate-blob" />
-          <div className="absolute w-[500px] h-[500px] bg-wet-plate-blue/20 rounded-full blur-3xl animate-blob-delayed" />
+          <div className="absolute w-[min(600px,90vw)] h-[min(600px,90vw)] bg-safety-orange/30 rounded-full blur-3xl animate-blob" />
+          <div className="absolute w-[min(500px,80vw)] h-[min(500px,80vw)] bg-wet-plate-blue/20 rounded-full blur-3xl animate-blob-delayed" />
         </div>
 
         {/* Static glass card - NO ROTATION */}
         <motion.div
-          className="relative glass-card w-full max-w-3xl p-8 md:p-16 rounded-3xl"
-          initial={{ opacity: 0, scale: 0.9 }}
+          className="relative glass-card w-full max-w-3xl p-6 sm:p-8 md:p-16 rounded-3xl"
+          initial={{ opacity: 1, scale: 1 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
           <motion.h2
-            className="font-serif text-2xl sm:text-3xl md:text-5xl text-center mb-8 leading-relaxed"
-            initial={{ opacity: 0 }}
+            className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-tight text-balance text-center mb-8 leading-relaxed"
+            initial={{ opacity: 1 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
           >
@@ -336,7 +353,7 @@ export default function Home() {
               <motion.div 
                 key={stat.label}
                 className="text-center"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 1, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
@@ -352,11 +369,11 @@ export default function Home() {
       </section>
 
       {/* Transmission Section */}
-      <section id="transmission" className="relative py-32 px-6 flex items-center justify-center min-h-[80vh]">
-        <div className="w-full max-w-2xl">
+      <section id="transmission" className="relative site-section flex items-center justify-center">
+        <div className="w-full max-w-2xl mx-auto">
           <motion.h2
-            className="font-serif text-5xl md:text-7xl text-center mb-16"
-            initial={{ opacity: 0, y: 50 }}
+            className="site-section-title"
+            initial={{ opacity: 1, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
@@ -364,8 +381,8 @@ export default function Home() {
           </motion.h2>
 
           <motion.p
-            className="text-center opacity-60 mb-12 max-w-xl mx-auto"
-            initial={{ opacity: 0 }}
+            className="site-section-copy"
+            initial={{ opacity: 0.6 }}
             whileInView={{ opacity: 0.6 }}
             viewport={{ once: true }}
           >
@@ -373,8 +390,8 @@ export default function Home() {
           </motion.p>
 
           <motion.div
-            className="glass-card rounded-3xl p-8 md:p-12"
-            initial={{ opacity: 0, y: 50 }}
+            className="glass-card rounded-3xl p-6 sm:p-8 md:p-12"
+            initial={{ opacity: 1, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
@@ -385,14 +402,23 @@ export default function Home() {
                   initial={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                 >
+                  <label htmlFor="transmission-input" className="sr-only">
+                    Transmission message
+                  </label>
                   <input
+                    id="transmission-input"
                     type="text"
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     placeholder={homepage.transmission.placeholder}
                     className="w-full bg-transparent border-b-2 border-charcoal/20 dark:border-white/20 focus:border-safety-orange outline-none text-xl md:text-2xl py-4 transition-colors placeholder:opacity-30"
                     onKeyDown={(e) => e.key === "Enter" && handleTransmit()}
+                    maxLength={500}
+                    aria-describedby="transmission-hint"
                   />
+                  <p id="transmission-hint" className="sr-only">
+                    Press Enter or use the send button to transmit your message
+                  </p>
                   
                   <div className="flex justify-center mt-12">
                     <motion.button

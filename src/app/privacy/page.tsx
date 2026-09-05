@@ -4,8 +4,7 @@ import { motion } from "framer-motion";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
 import Breadcrumbs from "@/app/components/Breadcrumbs";
-import { meta } from "@/app/lib/content";
-import { fadeUpVariant, staggerContainerVariant, staggerItemVariant } from "@/app/lib/animations";
+import { staggerContainerVariant, staggerItemVariant } from "@/app/lib/animations";
 
 const privacySections = [
   {
@@ -75,11 +74,11 @@ const privacySections = [
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-warm-white">
+    <main id="main-content" className="min-h-dvh bg-warm-white overflow-x-clip">
       <Header />
       <Breadcrumbs />
 
-      <section className="pt-28 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-12">
+      <section className="page-hero pb-16 sm:pb-20">
         <div className="max-w-3xl mx-auto">
           <motion.span
             className="inline-block px-4 py-2 rounded-full glass-card text-sm text-safety-orange font-medium mb-6 sm:mb-8"
@@ -89,7 +88,7 @@ export default function PrivacyPage() {
             Legal
           </motion.span>
           <motion.h1
-            className="font-serif text-4xl sm:text-5xl lg:text-6xl mb-6 sm:mb-8"
+            className="site-h1 mb-6 sm:mb-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}

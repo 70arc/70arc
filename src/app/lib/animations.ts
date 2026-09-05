@@ -8,13 +8,13 @@ import { Variants } from "framer-motion";
 
 // Fade up animation for content entering view
 export const fadeUpVariant: Variants = {
-  initial: { opacity: 0, y: 30 },
+  initial: { opacity: 1, y: 16 },
   animate: { 
     opacity: 1, 
     y: 0,
     transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }
   },
-  exit: { opacity: 0, y: -20 }
+  exit: { opacity: 1, y: -12 }
 };
 
 // Fade in animation
@@ -40,24 +40,24 @@ export const scaleInVariant: Variants = {
 
 // Slide in from left
 export const slideInLeftVariant: Variants = {
-  initial: { opacity: 0, x: -50 },
+  initial: { opacity: 1, x: -16 },
   animate: { 
     opacity: 1, 
     x: 0,
     transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }
   },
-  exit: { opacity: 0, x: -30 }
+  exit: { opacity: 1, x: -16 }
 };
 
 // Slide in from right
 export const slideInRightVariant: Variants = {
-  initial: { opacity: 0, x: 50 },
+  initial: { opacity: 1, x: 16 },
   animate: { 
     opacity: 1, 
     x: 0,
     transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }
   },
-  exit: { opacity: 0, x: 30 }
+  exit: { opacity: 1, x: 16 }
 };
 
 // Stagger container for children animations
@@ -73,7 +73,7 @@ export const staggerContainerVariant: Variants = {
 
 // Stagger item (child of stagger container)
 export const staggerItemVariant: Variants = {
-  initial: { opacity: 0, y: 20 },
+  initial: { opacity: 1, y: 12 },
   animate: { 
     opacity: 1, 
     y: 0,
@@ -190,7 +190,7 @@ export const quickTransition = {
 // VIEWPORT OPTIONS
 // ============================================
 
-export const viewportOnce = { once: true, margin: "-50px" };
+export const viewportOnce = { once: true, margin: "80px 0px" };
 export const viewportAlways = { once: false, margin: "-100px" };
 
 // ============================================

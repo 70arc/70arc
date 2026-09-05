@@ -12,12 +12,12 @@ import { cn } from "@/app/lib/utils";
 
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-warm-white">
+    <main id="main-content" className="min-h-dvh bg-warm-white overflow-x-clip">
       <Header />
       <Breadcrumbs />
 
       {/* Hero Section */}
-      <section className="pt-28 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-12">
+      <section className="page-hero">
         <div className="max-w-4xl mx-auto text-center">
           <motion.span
             className="inline-block px-4 py-2 rounded-full glass-card text-sm text-safety-orange font-medium mb-6 sm:mb-8"
@@ -27,7 +27,7 @@ export default function AboutPage() {
             {aboutPage.hero.badge}
           </motion.span>
           <motion.h1
-            className="font-serif text-4xl sm:text-5xl lg:text-7xl mb-6 sm:mb-8"
+            className="site-h1 mb-6 sm:mb-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -37,7 +37,7 @@ export default function AboutPage() {
             <span className="text-safety-orange">{aboutPage.hero.titleAccent}</span>
           </motion.h1>
           <motion.p
-            className="text-lg sm:text-xl text-charcoal/70 leading-relaxed max-w-2xl mx-auto"
+            className="site-lede mx-auto"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -48,7 +48,7 @@ export default function AboutPage() {
       </section>
 
       {/* Mission Quote */}
-      <section className="py-12 sm:py-20 px-4 sm:px-6 lg:px-12 bg-charcoal/5">
+      <section className="site-section bg-charcoal/5">
         <motion.div
           className="max-w-4xl mx-auto text-center"
           variants={fadeUpVariant}
@@ -64,10 +64,10 @@ export default function AboutPage() {
       </section>
 
       {/* Core Values */}
-      <section className="py-16 sm:py-20 lg:py-32 px-4 sm:px-6 lg:px-12">
+      <section className="site-section">
         <div className="max-w-6xl mx-auto">
           <motion.h2
-            className="font-serif text-3xl sm:text-4xl lg:text-5xl text-center mb-4 sm:mb-6"
+            className="site-section-title"
             variants={fadeUpVariant}
             initial="initial"
             whileInView="animate"
@@ -76,7 +76,7 @@ export default function AboutPage() {
             Core Values
           </motion.h2>
           <motion.p
-            className="text-center text-charcoal/60 mb-10 sm:mb-16 max-w-2xl mx-auto text-sm sm:text-base"
+            className="site-section-copy"
             variants={fadeUpVariant}
             initial="initial"
             whileInView="animate"
@@ -86,13 +86,13 @@ export default function AboutPage() {
           </motion.p>
 
           <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8"
             variants={staggerContainerVariant}
             initial="initial"
             whileInView="animate"
             viewport={{ once: true }}
           >
-            {aboutPage.values.map((value, index) => (
+            {aboutPage.values.map((value) => (
               <motion.div
                 key={value.title}
                 className="glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-8 text-center hover-lift"
@@ -110,10 +110,10 @@ export default function AboutPage() {
       </section>
 
       {/* Leadership Team */}
-      <section className="py-16 sm:py-20 lg:py-32 px-4 sm:px-6 lg:px-12 bg-charcoal text-white">
+      <section className="site-section bg-charcoal text-white">
         <div className="max-w-6xl mx-auto">
           <motion.h2
-            className="font-serif text-3xl sm:text-4xl lg:text-5xl text-center mb-4 sm:mb-6"
+            className="site-section-title"
             variants={fadeUpVariant}
             initial="initial"
             whileInView="animate"
@@ -122,7 +122,7 @@ export default function AboutPage() {
             Leadership
           </motion.h2>
           <motion.p
-            className="text-center text-white/60 mb-10 sm:mb-16 max-w-2xl mx-auto text-sm sm:text-base"
+            className="text-center text-white/60 mb-10 sm:mb-14 max-w-2xl mx-auto text-sm sm:text-base leading-relaxed"
             variants={fadeUpVariant}
             initial="initial"
             whileInView="animate"
@@ -151,6 +151,7 @@ export default function AboutPage() {
                     fill
                     className="object-cover"
                     sizes="(max-width: 640px) 128px, 160px"
+                    unoptimized
                   />
                 </div>
                 <h3 className="font-serif text-lg sm:text-xl mb-1">{member.name}</h3>
@@ -163,10 +164,10 @@ export default function AboutPage() {
       </section>
 
       {/* Company Journey Timeline */}
-      <section className="py-16 sm:py-20 lg:py-32 px-4 sm:px-6 lg:px-12">
+      <section className="site-section">
         <div className="max-w-4xl mx-auto">
           <motion.h2
-            className="font-serif text-3xl sm:text-4xl lg:text-5xl text-center mb-10 sm:mb-16"
+            className="site-section-title mb-10 sm:mb-14"
             variants={fadeUpVariant}
             initial="initial"
             whileInView="animate"
@@ -176,31 +177,29 @@ export default function AboutPage() {
           </motion.h2>
 
           <div className="relative">
-            {/* Timeline Line */}
-            <div className="absolute left-4 sm:left-1/2 top-0 bottom-0 w-px bg-charcoal/10 sm:-translate-x-1/2" />
+            <div className="absolute left-3 md:left-1/2 top-0 bottom-0 w-px bg-charcoal/10 md:-translate-x-1/2" />
 
             {aboutPage.milestones.map((milestone, index) => (
               <motion.div
-                key={index}
-                className={cn(
-                  "relative mb-8 sm:mb-12 last:mb-0",
-                  "pl-10 sm:pl-0",
-                  index % 2 === 0 ? "sm:pr-[52%]" : "sm:pl-[52%]"
-                )}
+                key={`${milestone.year}-${index}`}
+                className="relative mb-8 md:mb-12 last:mb-0 md:grid md:grid-cols-2 md:gap-12"
                 variants={index % 2 === 0 ? slideInLeftVariant : slideInRightVariant}
                 initial="initial"
                 whileInView="animate"
                 viewport={{ once: true }}
               >
-                {/* Timeline Dot */}
-                <div className="absolute left-2 sm:left-1/2 top-2 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-safety-orange sm:-translate-x-1/2 z-10" />
+                <div className="absolute left-3 md:left-1/2 top-5 w-3 h-3 rounded-full bg-safety-orange -translate-x-1/2 z-10" />
 
-                <div className={cn(
-                  "glass-card rounded-xl sm:rounded-2xl p-4 sm:p-6",
-                  index % 2 === 0 ? "sm:text-right" : ""
-                )}>
-                  <span className="text-safety-orange font-medium text-sm">{milestone.year}</span>
-                  <p className="text-charcoal/80 mt-2 text-sm sm:text-base">{milestone.event}</p>
+                <div
+                  className={cn(
+                    "pl-10 md:pl-0",
+                    index % 2 === 0 ? "md:col-start-1 md:text-right" : "md:col-start-2"
+                  )}
+                >
+                  <div className="glass-card rounded-xl md:rounded-2xl p-4 md:p-6">
+                    <span className="text-safety-orange font-medium text-sm">{milestone.year}</span>
+                    <p className="text-charcoal/80 mt-2 text-sm sm:text-base leading-relaxed">{milestone.event}</p>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -209,7 +208,7 @@ export default function AboutPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 sm:py-20 lg:py-32 px-4 sm:px-6 lg:px-12 bg-charcoal/5">
+      <section className="site-section bg-charcoal/5">
         <div className="max-w-6xl mx-auto">
           <motion.div 
             className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"

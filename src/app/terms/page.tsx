@@ -83,11 +83,11 @@ const termsSections = [
 
 export default function TermsPage() {
   return (
-    <main className="min-h-screen bg-warm-white">
+    <main id="main-content" className="min-h-dvh bg-warm-white overflow-x-clip">
       <Header />
       <Breadcrumbs />
 
-      <section className="pt-28 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-12">
+      <section className="page-hero pb-16 sm:pb-20">
         <div className="max-w-3xl mx-auto">
           <motion.span
             className="inline-block px-4 py-2 rounded-full glass-card text-sm text-safety-orange font-medium mb-6 sm:mb-8"
@@ -97,7 +97,7 @@ export default function TermsPage() {
             Legal
           </motion.span>
           <motion.h1
-            className="font-serif text-4xl sm:text-5xl lg:text-6xl mb-6 sm:mb-8"
+            className="site-h1 mb-6 sm:mb-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}

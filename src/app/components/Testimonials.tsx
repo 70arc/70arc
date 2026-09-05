@@ -21,11 +21,11 @@ export default function Testimonials() {
   };
 
   return (
-    <section className="py-12 md:py-20 lg:py-32 px-4 sm:px-6 lg:px-12 bg-charcoal/5 dark:bg-white/5">
+    <section className="site-section bg-charcoal/5 dark:bg-white/5">
       <div className="max-w-4xl mx-auto">
         <motion.h2
-          className="font-serif text-4xl md:text-5xl lg:text-6xl text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
+          className="site-section-title mb-10 sm:mb-14"
+          initial={{ opacity: 1, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >

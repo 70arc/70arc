@@ -42,22 +42,12 @@ export default function CompassNav() {
     }
   };
 
-  // Get label position - labels appear inside the compass area, not outside
-  const getLabelPosition = (direction: Direction) => {
-    switch (direction) {
-      case "N": return { x: 0, y: -100 };
-      case "E": return { x: 0, y: 40 };  // Below East button instead of to the right
-      case "S": return { x: 0, y: 100 };
-      case "W": return { x: 0, y: 40 };  // Below West button
-    }
-  };
-
   // Get section data from content.ts
   const sections = navigation.sections;
 
   return (
     <motion.nav
-      className="fixed top-20 right-4 z-40 hidden md:block"
+      className="fixed top-24 right-4 lg:right-6 z-40 hidden lg:block"
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 1.5, duration: 0.5 }}
@@ -108,8 +98,8 @@ export default function CompassNav() {
         <AnimatePresence>
           {activeDirection && isExpanded && (
             <motion.div
-              className="absolute left-1/2 -translate-x-1/2 whitespace-nowrap bg-charcoal dark:bg-white text-white dark:text-charcoal px-3 py-1 rounded-full text-xs"
-              style={{ top: "calc(100% + 12px)" }}
+              className="absolute top-full mt-3 right-0 max-w-[11rem] truncate bg-charcoal dark:bg-white text-white dark:text-charcoal px-3 py-1 rounded-full text-xs"
+              title={sections[directionMap[activeDirection]]?.label || activeDirection}
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}

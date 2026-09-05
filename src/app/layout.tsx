@@ -8,13 +8,13 @@ import BackToTop from "@/app/components/BackToTop";
 import CookieConsent from "@/app/components/CookieConsent";
 
 const playfair = Playfair_Display({
-  variable: "--font-serif",
+  variable: "--font-playfair",
   subsets: ["latin"],
   display: "swap",
 });
 
 const inter = Inter({
-  variable: "--font-sans",
+  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
 });
@@ -98,6 +98,9 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans antialiased bg-warm-white text-charcoal">
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <ThemeProvider>
           <SmoothScrollProvider>
             <ScrollProgress />

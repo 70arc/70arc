@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { useMousePositionRaw } from "@/app/hooks/useMousePosition";
+import { clamp } from "@/app/lib/utils";
 
 interface FloatingCardProps {
   title: string;
@@ -41,6 +42,10 @@ export default function FloatingCard({
   const magneticY = useMotionValue(0);
   const smoothX = useSpring(magneticX, { stiffness: 150, damping: 15 });
   const smoothY = useSpring(magneticY, { stiffness: 150, damping: 15 });
+  const cardY = useTransform(
+    [floatY, smoothY],
+    ([floatVal, magVal]) => Number(floatVal) + Number(magVal)
+  );
 
   const handleMouseMove = () => {
     if (!ref.current) return;
@@ -56,8 +61,8 @@ export default function FloatingCard({
     // Only apply magnetic effect when cursor is within 200px
     if (distance < 200) {
       const strength = (1 - distance / 200) * magneticStrength;
-      magneticX.set(distanceX * strength * 0.02);
-      magneticY.set(distanceY * strength * 0.02);
+      magneticX.set(clamp(distanceX * strength * 0.02, -16, 16));
+      magneticY.set(clamp(distanceY * strength * 0.02, -16, 16));
     } else {
       magneticX.set(0);
       magneticY.set(0);
@@ -67,14 +72,14 @@ export default function FloatingCard({
   return (
     <motion.div
       ref={ref}
-      className={`glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-8 hover-lift ${className}`}
+      className={`glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-8 ${className}`}
       style={{
-        y: floatY,
         x: smoothX,
+        y: cardY,
       }}
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 1, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true, margin: "80px 0px" }}
       transition={{
         duration: 0.8,
         delay: index * 0.1,

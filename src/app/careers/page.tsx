@@ -7,16 +7,14 @@ import Footer from "@/app/components/Footer";
 import Breadcrumbs from "@/app/components/Breadcrumbs";
 import { careersPage } from "@/app/lib/content";
 import { fadeUpVariant, staggerContainerVariant, staggerItemVariant } from "@/app/lib/animations";
-import { cn } from "@/app/lib/utils";
-
 export default function CareersPage() {
   return (
-    <main className="min-h-screen bg-warm-white">
+    <main id="main-content" className="min-h-dvh bg-warm-white overflow-x-clip">
       <Header />
       <Breadcrumbs />
 
       {/* Hero Section */}
-      <section className="pt-28 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6 lg:px-12">
+      <section className="page-hero">
         <div className="max-w-4xl mx-auto text-center">
           <motion.span
             className="inline-block px-4 py-2 rounded-full glass-card text-sm text-safety-orange font-medium mb-6 sm:mb-8"
@@ -26,7 +24,7 @@ export default function CareersPage() {
             {careersPage.hero.badge}
           </motion.span>
           <motion.h1
-            className="font-serif text-4xl sm:text-5xl lg:text-7xl mb-6 sm:mb-8"
+            className="site-h1 mb-6 sm:mb-8"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
@@ -36,7 +34,7 @@ export default function CareersPage() {
             <span className="text-safety-orange">{careersPage.hero.titleAccent}</span>
           </motion.h1>
           <motion.p
-            className="text-lg sm:text-xl text-charcoal/70 leading-relaxed max-w-2xl mx-auto"
+            className="site-lede mx-auto"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -47,10 +45,10 @@ export default function CareersPage() {
       </section>
 
       {/* Culture Section */}
-      <section className="py-16 sm:py-20 lg:py-32 px-4 sm:px-6 lg:px-12 bg-charcoal text-white">
+      <section className="site-section bg-charcoal text-white">
         <div className="max-w-6xl mx-auto">
           <motion.h2
-            className="font-serif text-3xl sm:text-4xl lg:text-5xl text-center mb-10 sm:mb-16"
+            className="site-section-title mb-10 sm:mb-14"
             variants={fadeUpVariant}
             initial="initial"
             whileInView="animate"
@@ -83,10 +81,10 @@ export default function CareersPage() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-16 sm:py-20 lg:py-32 px-4 sm:px-6 lg:px-12">
+      <section className="site-section">
         <div className="max-w-6xl mx-auto">
           <motion.h2
-            className="font-serif text-3xl sm:text-4xl lg:text-5xl text-center mb-4 sm:mb-6"
+            className="site-section-title"
             variants={fadeUpVariant}
             initial="initial"
             whileInView="animate"
@@ -95,7 +93,7 @@ export default function CareersPage() {
             Benefits
           </motion.h2>
           <motion.p
-            className="text-center text-charcoal/60 mb-10 sm:mb-16 max-w-2xl mx-auto text-sm sm:text-base"
+            className="site-section-copy"
             variants={fadeUpVariant}
             initial="initial"
             whileInView="animate"
@@ -105,7 +103,7 @@ export default function CareersPage() {
           </motion.p>
 
           <motion.div 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
             variants={staggerContainerVariant}
             initial="initial"
             whileInView="animate"
@@ -133,10 +131,10 @@ export default function CareersPage() {
       </section>
 
       {/* Open Positions */}
-      <section className="py-16 sm:py-20 lg:py-32 px-4 sm:px-6 lg:px-12 bg-charcoal/5">
+      <section className="site-section bg-charcoal/5">
         <div className="max-w-4xl mx-auto">
           <motion.h2
-            className="font-serif text-3xl sm:text-4xl lg:text-5xl text-center mb-4 sm:mb-6"
+            className="site-section-title"
             variants={fadeUpVariant}
             initial="initial"
             whileInView="animate"
@@ -145,7 +143,7 @@ export default function CareersPage() {
             Open Positions
           </motion.h2>
           <motion.p
-            className="text-center text-charcoal/60 mb-10 sm:mb-16 max-w-2xl mx-auto text-sm sm:text-base"
+            className="site-section-copy"
             variants={fadeUpVariant}
             initial="initial"
             whileInView="animate"
@@ -201,7 +199,7 @@ export default function CareersPage() {
                   <div className="flex-shrink-0">
                     <Link
                       href={`/contact?position=${encodeURIComponent(position.title)}`}
-                      className="inline-block px-5 sm:px-6 py-2.5 sm:py-3 bg-charcoal text-white rounded-full text-sm font-medium hover:bg-safety-orange transition-colors whitespace-nowrap"
+                      className="inline-flex items-center justify-center w-full lg:w-auto px-5 sm:px-6 py-2.5 sm:py-3 bg-charcoal text-white rounded-full text-sm font-medium hover:bg-safety-orange transition-colors"
                     >
                       Apply Now
                     </Link>
@@ -214,7 +212,7 @@ export default function CareersPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 sm:py-20 lg:py-32 px-4 sm:px-6 lg:px-12">
+      <section className="site-section">
         <motion.div
           className="max-w-3xl mx-auto text-center"
           variants={fadeUpVariant}
@@ -222,10 +220,10 @@ export default function CareersPage() {
           whileInView="animate"
           viewport={{ once: true }}
         >
-          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl mb-4 sm:mb-6">
+          <h2 className="site-h2 mb-4 sm:mb-6">
             {careersPage.cta.title}
           </h2>
-          <p className="text-charcoal/70 mb-6 sm:mb-8 max-w-xl mx-auto text-sm sm:text-base leading-relaxed">
+          <p className="site-lede mx-auto mb-6 sm:mb-8">
             {careersPage.cta.description}
           </p>
           <Link

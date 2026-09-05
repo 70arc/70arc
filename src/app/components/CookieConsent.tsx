@@ -27,7 +27,7 @@ export default function CookieConsent() {
     const allAccepted = { necessary: true, analytics: true, marketing: true };
     try {
       localStorage.setItem("cookie-consent", JSON.stringify(allAccepted));
-    } catch (e) {
+    } catch {
       // localStorage may be unavailable in some browsers
     }
     setIsVisible(false);
@@ -37,7 +37,7 @@ export default function CookieConsent() {
     const onlyNecessary = { necessary: true, analytics: false, marketing: false };
     try {
       localStorage.setItem("cookie-consent", JSON.stringify(onlyNecessary));
-    } catch (e) {
+    } catch {
       // localStorage may be unavailable
     }
     setIsVisible(false);
@@ -46,7 +46,7 @@ export default function CookieConsent() {
   const handleSavePreferences = () => {
     try {
       localStorage.setItem("cookie-consent", JSON.stringify(preferences));
-    } catch (e) {
+    } catch {
       // localStorage may be unavailable
     }
     setIsVisible(false);
@@ -63,7 +63,7 @@ export default function CookieConsent() {
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: "spring", damping: 25 }}
         >
-          <div className="max-w-4xl mx-auto glass-card rounded-2xl p-4 sm:p-6 shadow-2xl safe-area-inset">
+          <div className="max-w-4xl mx-auto glass-card rounded-2xl p-4 sm:p-6 shadow-2xl safe-area-inset max-h-[70vh] overflow-y-auto">
             {!showPreferences ? (
               <>
                 <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
@@ -77,7 +77,7 @@ export default function CookieConsent() {
                       .
                     </p>
                   </div>
-                  <div className="flex flex-col sm:flex-row gap-2">
+                  <div className="flex flex-col sm:flex-row flex-wrap gap-2 w-full sm:w-auto">
                     <button
                       onClick={() => setShowPreferences(true)}
                       className="px-3 py-2 text-xs sm:text-sm font-medium rounded-full border border-charcoal/20 dark:border-white/20 text-charcoal dark:text-white hover:bg-charcoal/5 dark:hover:bg-white/5 transition-colors whitespace-nowrap"

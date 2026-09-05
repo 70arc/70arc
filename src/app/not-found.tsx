@@ -7,10 +7,10 @@ import Footer from "@/app/components/Footer";
 
 export default function NotFound() {
   return (
-    <main className="min-h-screen bg-warm-white flex flex-col">
+    <main id="main-content" className="min-h-dvh bg-warm-white flex flex-col overflow-x-clip">
       <Header />
       
-      <div className="flex-1 flex items-center justify-center px-6 py-32">
+      <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-12 pt-28 pb-16 sm:py-32">
         <motion.div 
           className="text-center max-w-2xl mx-auto"
           initial={{ opacity: 0, y: 30 }}
@@ -38,10 +38,10 @@ export default function NotFound() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <h1 className="font-serif text-3xl sm:text-4xl lg:text-5xl mb-4">
+            <h1 className="site-h1 mb-4">
               Signal Lost
             </h1>
-            <p className="text-lg opacity-70 mb-8 max-w-md mx-auto">
+            <p className="site-lede mx-auto mb-8">
               The coordinates you&apos;re searching for don&apos;t exist in our system. 
               The page may have been moved or deleted.
             </p>

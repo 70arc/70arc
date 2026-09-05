@@ -11,6 +11,30 @@ interface CountUpProps {
   className?: string;
 }
 
+function parseStat(end: number | string) {
+  if (typeof end === "number") {
+    return { lead: "", value: end, trail: "", decimals: 0 };
+  }
+
+  const match = end.match(/^(.*?)(\d+(?:\.\d+)?)(.*)$/);
+  if (!match) {
+    return { lead: "", value: null, trail: end, decimals: 0 };
+  }
+
+  const raw = match[2];
+  const decimals = raw.includes(".") ? raw.split(".")[1].length : 0;
+  return {
+    lead: match[1],
+    value: parseFloat(raw),
+    trail: match[3],
+    decimals,
+  };
+}
+
+function formatCount(value: number, decimals: number) {
+  return decimals > 0 ? value.toFixed(decimals) : String(Math.round(value));
+}
+
 export default function CountUp({
   end,
   duration = 2,
@@ -20,58 +44,47 @@ export default function CountUp({
 }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [count, setCount] = useState(0);
-
-  // Parse end value - handle strings like "100B+", "<50ms", "99.7%"
-  const numericValue = typeof end === "string" 
-    ? parseFloat(end.replace(/[^0-9.]/g, "")) || 0
-    : end;
-  
-  const isNumeric = !isNaN(numericValue) && numericValue > 0;
+  const parsed = parseStat(end);
+  const finalLabel =
+    parsed.value === null
+      ? `${prefix}${end}${suffix}`
+      : `${prefix}${parsed.lead}${formatCount(parsed.value, parsed.decimals)}${parsed.trail}${suffix}`;
+  const [animatedLabel, setAnimatedLabel] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isInView || !isNumeric) return;
+    if (!isInView || parsed.value === null || parsed.value === 0) {
+      return;
+    }
 
-    const startTime = Date.now();
-    const endTime = startTime + duration * 1000;
+    const startTime = performance.now();
+    const durationMs = duration * 1000;
+    let frame = 0;
 
-    const updateCount = () => {
-      const now = Date.now();
-      const progress = Math.min((now - startTime) / (duration * 1000), 1);
-      
-      // Easing function (ease-out)
+    const updateCount = (now: number) => {
+      const progress = Math.min((now - startTime) / durationMs, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
-      const currentCount = Math.floor(eased * numericValue);
-      
-      setCount(currentCount);
+      const current = parsed.value! * eased;
+      setAnimatedLabel(
+        `${prefix}${parsed.lead}${formatCount(current, parsed.decimals)}${parsed.trail}${suffix}`
+      );
 
-      if (now < endTime) {
-        requestAnimationFrame(updateCount);
-      } else {
-        setCount(numericValue);
+      if (progress < 1) {
+        frame = requestAnimationFrame(updateCount);
       }
     };
 
-    requestAnimationFrame(updateCount);
-  }, [isInView, numericValue, duration, isNumeric]);
+    frame = requestAnimationFrame(updateCount);
+    return () => cancelAnimationFrame(frame);
+  }, [isInView, parsed.value, parsed.lead, parsed.trail, parsed.decimals, duration, prefix, suffix]);
 
-  // For non-numeric values, just display them directly
-  if (!isNumeric) {
-    return (
-      <span ref={ref} className={className}>
-        {prefix}{end}{suffix}
-      </span>
-    );
-  }
-
-  // Format the display value
-  const displayValue = typeof end === "string" 
-    ? end.replace(String(numericValue), String(count))
-    : `${prefix}${count}${suffix}`;
+  const display =
+    isInView && parsed.value && parsed.value > 0
+      ? animatedLabel ?? `${prefix}${parsed.lead}${formatCount(0, parsed.decimals)}${parsed.trail}${suffix}`
+      : finalLabel;
 
   return (
     <span ref={ref} className={className}>
-      {isInView ? displayValue : `${prefix}0${suffix}`}
+      {display}
     </span>
   );
 }

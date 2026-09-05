@@ -135,18 +135,18 @@ export const homepage = {
   // Atmosphere section orbital carousel images
   // Images are located in public/images/atmosphere/
   atmosphereImages: [
-    "/images/atmosphere/(1).jpg",
-    "/images/atmosphere/(2).jpg",
-    "/images/atmosphere/(3).jpg",
-    "/images/atmosphere/(4).jpg",
-    "/images/atmosphere/(5).jpg",
-    "/images/atmosphere/(6).jpg",
-    "/images/atmosphere/(7).jpg",
-    "/images/atmosphere/(8).jpg",
-    "/images/atmosphere/(9).jpg",
-    "/images/atmosphere/(10).jpg",
-    "/images/atmosphere/(11).jpg",
-    "/images/atmosphere/(12).jpg",
+    "/images/atmosphere/1.jpg",
+    "/images/atmosphere/2.jpg",
+    "/images/atmosphere/3.jpg",
+    "/images/atmosphere/4.jpg",
+    "/images/atmosphere/5.jpg",
+    "/images/atmosphere/6.jpg",
+    "/images/atmosphere/7.jpg",
+    "/images/atmosphere/8.jpg",
+    "/images/atmosphere/9.jpg",
+    "/images/atmosphere/10.jpg",
+    "/images/atmosphere/11.jpg",
+    "/images/atmosphere/12.jpg",
   ],
   
   telemetry: {

@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useRef } from "react";
+import { ReactNode, useRef, useSyncExternalStore } from "react";
 import { motion, useInView, Variants } from "framer-motion";
 import { 
   fadeUpVariant, 
@@ -11,7 +11,6 @@ import {
   staggerContainerVariant,
   staggerItemVariant,
 } from "@/app/lib/animations";
-import { prefersReducedMotion } from "@/app/lib/utils";
 
 type AnimationType = "fadeUp" | "fadeIn" | "scaleIn" | "slideLeft" | "slideRight" | "stagger" | "staggerItem";
 
@@ -34,6 +33,20 @@ const variantMap: Record<AnimationType, Variants> = {
   staggerItem: staggerItemVariant,
 };
 
+function subscribeReducedMotion(onStoreChange: () => void) {
+  const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  mediaQuery.addEventListener("change", onStoreChange);
+  return () => mediaQuery.removeEventListener("change", onStoreChange);
+}
+
+function usePrefersReducedMotion() {
+  return useSyncExternalStore(
+    subscribeReducedMotion,
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    () => false
+  );
+}
+
 export default function AnimatedSection({
   children,
   className = "",
@@ -47,9 +60,9 @@ export default function AnimatedSection({
     once, 
     amount: threshold,
   });
+  const reduceMotion = usePrefersReducedMotion();
 
-  // Check for reduced motion preference
-  if (typeof window !== "undefined" && prefersReducedMotion()) {
+  if (reduceMotion) {
     return <div className={className}>{children}</div>;
   }
 
@@ -120,8 +133,9 @@ interface StaggerContainerProps {
 export function StaggerContainer({ children, className = "" }: StaggerContainerProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true });
+  const reduceMotion = usePrefersReducedMotion();
 
-  if (typeof window !== "undefined" && prefersReducedMotion()) {
+  if (reduceMotion) {
     return <div className={className}>{children}</div>;
   }
 
@@ -139,7 +153,9 @@ export function StaggerContainer({ children, className = "" }: StaggerContainerP
 }
 
 export function StaggerItem({ children, className = "" }: { children: ReactNode; className?: string }) {
-  if (typeof window !== "undefined" && prefersReducedMotion()) {
+  const reduceMotion = usePrefersReducedMotion();
+
+  if (reduceMotion) {
     return <div className={className}>{children}</div>;
   }
 
