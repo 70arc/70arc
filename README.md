@@ -1,28 +1,11 @@
-# 70Arc
+# 70arc
 
-Autonomous Creative Systems website.
-
-## Quick Start
+70arc designs, builds and publishes AI products.
 
 ```bash
-npm install
 npm run dev
+npm run build
+npm run start
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
-
-## Edit Content
-
-All content is in `src/app/lib/content.ts`
-
-## Add Images
-
-Drop images into `public/images/` folders
-
-## Deploy
-
-Push to GitHub → Vercel auto-deploys
-
-## Tech
-
-Next.js • TypeScript • Tailwind CSS • Framer Motion
+Copy lives in `content/site.ts`. Products live in `content/products.ts`. See `docs/EDITING.md`.
