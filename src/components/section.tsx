@@ -1,15 +1,7 @@
 import type { ReactNode } from "react";
 
-export function Container({
-  children,
-  wide = false,
-  className,
-}: {
-  children: ReactNode;
-  wide?: boolean;
-  className?: string;
-}) {
-  const classes = [wide ? "container-wide" : "container", className].filter(Boolean).join(" ");
+export function Container({ children, className }: { children: ReactNode; className?: string }) {
+  const classes = ["container", className].filter(Boolean).join(" ");
   return <div className={classes}>{children}</div>;
 }
 

@@ -39,7 +39,6 @@
   }
 
   .tile {
-    min-height: 440px;
     padding: var(--space-48) var(--space-32);
   }
 }

@@ -42,7 +42,7 @@ Global:
 
 Home (`/`) in this order:
 1. **Hero**: full-viewport-height (min 100svh minus nav), centred. Eyebrow `site.hero.eyebrow`, H1 `site.hero.title` set huge, subhead, primary button (`site.hero.primary` -> `/#products`) and a secondary text link ("Our approach" -> `/#approach`, string added to site.ts). Under it, a large crafted hero visual: an abstract arc motif derived from the brand name (e.g. concentric arcs drawn as thin SVG strokes that draw in on load and subtly rotate/parallax on scroll). Monochrome with at most one accent stroke.
-2. **Mission statement**: `site.mission` as a huge centred statement with a scroll-linked word-by-word reveal (opacity 0.35 -> 1 per word as it crosses the viewport; full opacity at rest when reduced-motion or JS is off).
+2. **Mission statement**: `site.mission` as a huge centred statement with a scroll-linked word-by-word reveal (opacity 0.52 -> 1 per word as it crosses the viewport, so large text stays at least 3:1; full opacity at rest when reduced-motion or JS is off).
 3. **Products**: section header from `site.productsSection`. Then **sticky scroll storytelling**: on >=1024px a two-column layout where the left column is sticky (product visual crossfades between the three `art` compositions) and the right column scrolls through each product (name, status pill, tagline, summary, link "Learn more", or "Visit product" if `url`). Below 1024px it collapses to stacked full-width product panels (bg-alt, radius 32px) with their visual on top. Placeholders must still look intentional.
 4. **Principles**: `site.featured` (Clear / Careful / Lasting) as three tall tiles in a row (bg-alt, radius 22px), each with a crafted icon and the number set small.
 5. **Approach** (`id="approach"`): `site.approach` four steps as a horizontal progress rail on desktop with a line that fills as you scroll through the section (scroll-linked), vertical on mobile.
@@ -99,3 +99,19 @@ Phase 3 motion, 2026-11-19.
 - The home H1 uses a transform-only load animation so it can paint on the first frame. Other page H1s with `data-reveal` also stay at opacity 1.
 - `experimental.viewTransition` is enabled. In Next 16.1.6 that flag does not wrap App Router navigations, so client navigations call `document.startViewTransition` when it exists. Shared product visuals use `vt-{slug}`.
 - Mission text is a visually hidden sentence plus `aria-hidden` words. Product cards no longer override their accessible name.
+
+Phase 4 polish, 2026-11-19.
+
+- Mission words animate opacity from 0.52 to 1, not 0.35. At 0.35, #1d1d1f on #ffffff is about 2.17:1. At 0.52 it is about 3.47:1, and #f5f5f7 on #000000 is higher, so every scrub step clears the large-text 3:1 floor in both themes. Opacity stays the animated property. The scrub is still obvious.
+- "Learn more" keeps that visible label. `productsSection.learnMoreAbout` ("about") plus the product name is visually hidden after it, on the home story and on the product cards. The accessible name starts with the visible words.
+- The console warning was Next 16 preloading `not-found.tsx`'s CSS module on every route (`rel="preload" as="style"`) and only attaching it as a stylesheet on the 404. That chunk was `ba694d53c170a9b6.css`. The not-found rules now live in `globals.css`, which is already a used stylesheet, so the extra preload is gone. This was the route CSS split, not the font and not a client-component import.
+- Critique, then what changed:
+  1. The mission measure was 14em of the body size, about 238px, so the display type stacked one word per line on desktop and left a tall empty band. The measure is now 12em of the display size.
+  2. The hero lede on a phone ended on "and trust." `text-wrap: balance` is set on that lede.
+  3. Product drawings read as wireframe clip-art: fake text lines, a tic-tac-toe grid, and a plus sign. They are redrawn as three monochrome compositions (stacked plates with one arc, an uneven module grid, pieces set on an arc) using radii 12, 22, and 32.
+  4. The company intro was its own section, so its bottom padding plus the next section's top padding left a blank viewport. The intro section no longer adds bottom padding.
+  5. Principle tiles forced 440px of height around a short paragraph. Height now follows the text and the 48px padding.
+  6. The mobile footer stacked two link columns under 64px of padding and ran long. Columns sit side by side from the smallest width, and the mobile padding is 48/24.
+  7. Button padding was 22px and the chevron gap was 6px. Both use the spacing tokens.
+- Removed the unused ghost button, the unused layout utilities (`.stack`, `.cluster`, `.center`, `.grid`, `.measure`, `.container-wide`), and `not-found.module.css`. `--container-wide` stays, because the header uses it.
+- No new dependency. Known gap: placeholders are still placeholders. The sticky product story still gives each step a viewport of scroll, which is the story, and it reads as open space if you look at the full page at once.

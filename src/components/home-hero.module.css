@@ -18,8 +18,9 @@
   max-width: 9em;
 }
 
-.subhead {
+.subhead:global(.lede) {
   max-width: 28em;
+  text-wrap: balance;
 }
 
 .actions {

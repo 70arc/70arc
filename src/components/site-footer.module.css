@@ -1,11 +1,11 @@
 .footer {
-  padding-block: var(--space-64) var(--space-32);
+  padding-block: var(--space-48) var(--space-24);
   border-top: 1px solid var(--hairline);
 }
 
 .top {
   display: grid;
-  gap: var(--space-48);
+  gap: var(--space-32);
 }
 
 .brand {
@@ -22,7 +22,8 @@
 
 .columns {
   display: grid;
-  gap: var(--space-32);
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-16);
 }
 
 .columns nav {
@@ -46,7 +47,7 @@
 
 .legal {
   max-width: none;
-  margin-top: var(--space-48);
+  margin-top: var(--space-32);
   padding-top: var(--space-16);
   border-top: 1px solid var(--hairline);
   color: var(--muted);
@@ -60,13 +61,21 @@
 }
 
 @media (min-width: 768px) {
+  .footer {
+    padding-block: var(--space-64) var(--space-32);
+  }
+
   .top {
     grid-template-columns: 1.3fr 1fr;
     align-items: start;
+    gap: var(--space-48);
   }
 
   .columns {
-    grid-template-columns: 1fr 1fr;
     gap: var(--space-24);
+  }
+
+  .legal {
+    margin-top: var(--space-48);
   }
 }

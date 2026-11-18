@@ -3,6 +3,7 @@ import Link from "next/link";
 import { publishedProducts } from "@content/products";
 import { site } from "@content/site";
 import { Icon } from "@/components/icon";
+import { ProductLinkText } from "@/components/product-link-text";
 import { ProductVisual } from "@/components/product-visual";
 import { Container, Section } from "@/components/section";
 import { StatusPill } from "@/components/status-pill";
@@ -38,7 +39,7 @@ export default function ProductsPage() {
                 <h2>{product.name}</h2>
                 <p className={styles.tagline}>{product.tagline}</p>
                 <span className="chevron-link">
-                  {site.productsSection.learnMore}
+                  <ProductLinkText name={product.name} />
                   <Icon name="chevron" />
                 </span>
               </Link>

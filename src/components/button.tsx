@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { Icon } from "@/components/icon";
 
-type Variant = "primary" | "secondary" | "ghost" | "text";
+type Variant = "primary" | "secondary" | "text";
 
 function classes(variant: Variant, className?: string) {
   const base =
@@ -10,9 +10,7 @@ function classes(variant: Variant, className?: string) {
       ? "chevron-link"
       : variant === "primary"
         ? "button button-primary"
-        : variant === "secondary"
-          ? "button button-secondary"
-          : "button button-ghost";
+        : "button button-secondary";
   return className ? `${base} ${className}` : base;
 }
 

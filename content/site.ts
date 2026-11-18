@@ -36,6 +36,7 @@ export const site = {
     indexTitle: "Products.",
     indexIntro: "The products we're building at 70arc.",
     learnMore: "Learn more",
+    learnMoreAbout: "about",
     visit: "Visit product",
     back: "All products",
     overview: "Overview",

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { publishedProducts } from "@content/products";
 import { site } from "@content/site";
 import { LinkButton } from "@/components/button";
+import { ProductLinkText } from "@/components/product-link-text";
 import { ProductVisual } from "@/components/product-visual";
 import { Container, Section } from "@/components/section";
 import { SectionHeading } from "@/components/section-heading";
@@ -74,7 +75,6 @@ export function ProductStory() {
           <ol ref={listRef} className={styles.steps}>
             {products.map((product, index) => {
               const href = product.url ?? `/products/${product.slug}`;
-              const label = product.url ? site.productsSection.visit : site.productsSection.learnMore;
               return (
                 <li
                   key={product.slug}
@@ -92,7 +92,7 @@ export function ProductStory() {
                   <p className={`lede ${styles.tagline}`}>{product.tagline}</p>
                   <p className={styles.summary}>{product.summary}</p>
                   <LinkButton href={href} variant="text">
-                    {label}
+                    <ProductLinkText name={product.name} external={Boolean(product.url)} />
                   </LinkButton>
                 </li>
               );

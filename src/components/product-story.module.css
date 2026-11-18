@@ -69,8 +69,8 @@
 }
 
 .progress span {
-  width: 6px;
-  height: 6px;
+  width: var(--space-8);
+  height: var(--space-8);
   border-radius: var(--radius-pill);
   background: var(--ink);
   opacity: 0.28;

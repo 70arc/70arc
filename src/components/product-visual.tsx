@@ -12,12 +12,10 @@ const stroke = {
 function Stack() {
   return (
     <g {...stroke}>
-      <rect x="168" y="88" width="280" height="64" rx="16" opacity="0.35" />
-      <rect x="148" y="156" width="320" height="76" rx="18" opacity="0.62" />
-      <rect x="112" y="236" width="392" height="132" rx="22" />
-      <path d="M156 292h176" opacity="0.7" />
-      <path d="M156 316h112" opacity="0.4" />
-      <path d="M430 292a28 28 0 0 1 28 28" opacity="0.8" />
+      <rect x="196" y="72" width="248" height="72" rx="22" opacity="0.4" />
+      <rect x="156" y="168" width="328" height="84" rx="22" opacity="0.68" />
+      <rect x="104" y="276" width="432" height="120" rx="32" />
+      <path d="M232 336q88-52 176 0" />
     </g>
   );
 }
@@ -25,12 +23,11 @@ function Stack() {
 function GridArt() {
   return (
     <g {...stroke}>
-      <rect x="96" y="72" width="448" height="336" rx="24" />
-      <path d="M208 96v288M320 96v288M432 96v288" opacity="0.4" />
-      <path d="M120 184h400M120 296h400" opacity="0.4" />
-      <rect x="228" y="204" width="72" height="72" rx="12" />
-      <path d="M456 112a36 36 0 0 1 36 36" />
-      <path d="M132 120l40 40" opacity="0.45" />
+      <rect x="88" y="56" width="464" height="368" rx="32" />
+      <path d="M320 80v320M112 240h416" opacity="0.35" />
+      <rect x="136" y="96" width="152" height="112" rx="22" opacity="0.55" />
+      <rect x="352" y="272" width="160" height="112" rx="22" />
+      <rect x="392" y="128" width="72" height="72" rx="12" opacity="0.8" />
     </g>
   );
 }
@@ -38,13 +35,12 @@ function GridArt() {
 function Exploded() {
   return (
     <g {...stroke}>
-      <path d="M320 214v72M284 250h72" opacity="0.35" />
-      <circle cx="206" cy="148" r="50" />
-      <rect x="386" y="112" width="96" height="96" rx="18" />
-      <rect x="164" y="308" width="156" height="44" rx="22" />
-      <path d="M248 184L292 226" strokeDasharray="1.5 7" opacity="0.55" />
-      <path d="M386 176L348 226" strokeDasharray="1.5 7" opacity="0.55" />
-      <path d="M250 308L304 274" strokeDasharray="1.5 7" opacity="0.55" />
+      <path d="M72 352Q320 28 568 352" opacity="0.28" />
+      <rect x="96" y="248" width="176" height="80" rx="32" />
+      <rect x="252" y="88" width="120" height="120" rx="22" />
+      <rect x="412" y="176" width="140" height="96" rx="22" />
+      <path d="M272 288C300 240 276 168 292 148" strokeDasharray="1.5 7" opacity="0.55" />
+      <path d="M372 148C404 168 404 196 412 212" strokeDasharray="1.5 7" opacity="0.55" />
     </g>
   );
 }

@@ -11,7 +11,7 @@ export const metadata = pageMeta(`${site.company.title.replace(".", "")} | ${sit
 export default function CompanyPage() {
   return (
     <>
-      <Section>
+      <Section className={styles.introSection}>
         <Container>
           <div className={styles.intro}>
             <h1 tabIndex={-1} data-reveal="">

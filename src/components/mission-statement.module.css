@@ -5,12 +5,14 @@
 }
 
 .statement {
-  width: min(100%, 14em);
+  width: 100%;
   margin-inline: auto;
   text-align: center;
 }
 
 .line {
+  max-width: 12em;
+  margin-inline: auto;
   color: var(--ink);
   font-size: var(--text-display-l);
   font-weight: 600;
@@ -24,17 +26,18 @@
   opacity: 1;
 }
 
+/* 0.52 is the dimmest scrub step. #1d1d1f at that opacity on #ffffff is about 3.47:1, above the 3:1 large-text floor. The same floor on #000000 is higher. */
 :global(html[data-motion="on"]) .mission {
   --p: 0;
 }
 
 :global(html[data-motion="on"]) .word {
-  opacity: clamp(0.35, calc(0.35 + (var(--p) * 2 * var(--n) - var(--i))), 1);
+  opacity: clamp(0.52, calc(0.52 + (var(--p) * 2 * var(--n) - var(--i))), 1);
 }
 
 @supports (animation-timeline: view()) {
   :global(html[data-motion="on"]) .word {
-    opacity: 0.35;
+    opacity: 0.52;
     animation: word-in linear both;
     animation-timeline: view();
     animation-range: cover 25% cover 55%;
@@ -43,7 +46,7 @@
 
 @keyframes word-in {
   from {
-    opacity: 0.35;
+    opacity: 0.52;
   }
   to {
     opacity: 1;
