@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { publishedProducts } from "@content/products";
 import { site } from "@content/site";
@@ -27,12 +28,14 @@ export default function ProductsPage() {
         <ul className={styles.grid}>
           {products.map((product, index) => (
             <li key={product.slug} data-reveal="" data-stagger={index}>
-              <Link href={`/products/${product.slug}`} className={styles.card} aria-labelledby={`card-${product.slug}`}>
-                <div className={styles.visual} aria-hidden="true">
-                  <ProductVisual art={product.art} />
+              <Link href={`/products/${product.slug}`} className={styles.card}>
+                <div className={styles.visual} aria-hidden="true" style={{ viewTransitionName: `vt-${product.slug}` } as CSSProperties}>
+                  <div className="scroll-shift" data-scroll-progress="">
+                    <ProductVisual art={product.art} />
+                  </div>
                 </div>
                 <StatusPill status={product.status} />
-                <h2 id={`card-${product.slug}`}>{product.name}</h2>
+                <h2>{product.name}</h2>
                 <p className={styles.tagline}>{product.tagline}</p>
                 <span className="chevron-link">
                   {site.productsSection.learnMore}

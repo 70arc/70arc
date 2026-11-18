@@ -269,7 +269,7 @@ p {
     background-color var(--duration-ui) var(--ease-out),
     border-color var(--duration-ui) var(--ease-out),
     color var(--duration-ui) var(--ease-out),
-    transform var(--duration-micro) var(--ease-out);
+    transform var(--duration-ui) var(--ease-out);
 }
 
 .button-primary {
@@ -310,7 +310,7 @@ p {
   transition: transform var(--duration-ui) var(--ease-out);
 }
 
-@media (hover: hover) {
+@media (hover: hover) and (pointer: fine) {
   .button-primary:hover {
     background: color-mix(in srgb, var(--accent) 88%, #000000);
   }
@@ -328,11 +328,11 @@ p {
   }
 
   .chevron-link:hover svg {
-    transform: translateX(3px);
+    transform: translateX(2px);
   }
 }
 
-@media (hover: hover) and (prefers-color-scheme: dark) {
+@media (hover: hover) and (pointer: fine) and (prefers-color-scheme: dark) {
   .button-primary:hover {
     background: color-mix(in srgb, var(--accent) 88%, #ffffff);
   }
@@ -452,9 +452,56 @@ html[data-motion="on"] [data-reveal] {
   transition-delay: calc(var(--reveal-index, 0) * var(--stagger));
 }
 
+/* The page H1 stays painted. Motion is transform only, so LCP is not delayed. */
+html[data-motion="on"] h1[data-reveal] {
+  opacity: 1;
+}
+
 html[data-motion="on"] [data-reveal][data-shown="true"] {
   opacity: 1;
   transform: none;
+}
+
+html[data-motion="on"] .scroll-shift {
+  --p: 0.5;
+  transform: translateY(calc((0.5 - var(--p)) * 24px));
+}
+
+@supports (animation-timeline: view()) {
+  html[data-motion="on"] .scroll-shift {
+    transform: none;
+    animation: scroll-shift linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+}
+
+@keyframes scroll-shift {
+  from {
+    transform: translateY(12px);
+  }
+  to {
+    transform: translateY(-12px);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(root),
+  ::view-transition-new(root),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 300ms;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-timing-function: var(--ease-in-out);
+  }
 }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -478,7 +525,9 @@ html[data-motion="on"] [data-reveal][data-shown="true"] {
     scroll-behavior: auto !important;
   }
 
-  html[data-motion="on"] [data-reveal] {
+  html[data-motion="on"] [data-reveal],
+  html[data-motion="on"] h1[data-reveal],
+  html[data-motion="on"] .scroll-shift {
     opacity: 1 !important;
     transform: none !important;
   }
@@ -489,5 +538,11 @@ html[data-motion="on"] [data-reveal][data-shown="true"] {
   .chevron-link svg,
   .chevron-link:hover svg {
     transform: none;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }

@@ -92,3 +92,10 @@ Phase 2 pages, 2026-11-19.
 - Home, products, product detail, company, and not-found now follow section 3. Strings come from `content/site.ts` and `content/products.ts`. No new runtime dependency.
 - Motion stays on the Phase 1 observer. `data-stagger` sets `--reveal-index`. Mission words, the approach rail, and the hero visual read `--p`. Hero arcs draw in once, then drift on a 28s cycle. The product stage crossfades in 600ms. Phase 3 can move the scroll effects to `animation-timeline` and add a View Transitions fade.
 - The hero is slightly shorter than `100svh` minus the nav so the arc band still fits under the announcement bar.
+
+Phase 3 motion, 2026-11-19.
+
+- No new runtime dependency. The same `MotionRoot` observer reveals elements. Scroll-driven CSS (`animation-timeline`) handles the hero, mission, approach rail, and product visuals where the browser supports it. The `--p` listener stays as the fallback and is not attached while those elements are off-screen.
+- The home H1 uses a transform-only load animation so it can paint on the first frame. Other page H1s with `data-reveal` also stay at opacity 1.
+- `experimental.viewTransition` is enabled. In Next 16.1.6 that flag does not wrap App Router navigations, so client navigations call `document.startViewTransition` when it exists. Shared product visuals use `vt-{slug}`.
+- Mission text is a visually hidden sentence plus `aria-hidden` words. Product cards no longer override their accessible name.

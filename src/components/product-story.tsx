@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useEffect, useRef, useState } from "react";
 import { publishedProducts } from "@content/products";
 import { site } from "@content/site";
@@ -22,8 +23,8 @@ export function ProductStory() {
     const ratios = new Map<Element, number>();
     const observer = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) ratios.set(entry.target, entry.intersectionRatio);
-        let best = 0;
+        for (const entry of entries) ratios.set(entry.target, entry.isIntersecting ? entry.intersectionRatio : 0);
+        let best = -1;
         let bestRatio = 0;
         steps.forEach((step, index) => {
           const ratio = ratios.get(step) ?? 0;
@@ -32,9 +33,9 @@ export function ProductStory() {
             best = index;
           }
         });
-        if (bestRatio > 0) setActive((current) => (current === best ? current : best));
+        if (best >= 0) setActive((current) => (current === best ? current : best));
       },
-      { threshold: [0, 0.25, 0.5, 0.75, 1] },
+      { rootMargin: "-40% 0px -40% 0px", threshold: [0, 0.25, 0.5, 1] },
     );
     for (const step of steps) observer.observe(step);
     return () => observer.disconnect();
@@ -50,22 +51,41 @@ export function ProductStory() {
           title={site.productsSection.title}
           lede={site.productsSection.subhead}
         />
-        <div className={styles.story}>
+        <div className={styles.story} data-active={active}>
           <div className={styles.stage} aria-hidden="true">
             {products.map((product, index) => (
-              <div key={product.slug} className={styles.stageVisual} data-on={index === active ? "true" : "false"}>
-                <ProductVisual art={product.art} />
+              <div
+                key={product.slug}
+                className={styles.stageVisual}
+                data-on={index === active ? "true" : "false"}
+                style={{ "--vt": `vt-${product.slug}` } as CSSProperties}
+              >
+                <div className={styles.stageShift} data-scroll-progress="">
+                  <ProductVisual art={product.art} />
+                </div>
               </div>
             ))}
+            <div className={styles.progress}>
+              {products.map((product, index) => (
+                <span key={product.slug} data-on={index === active ? "true" : "false"} />
+              ))}
+            </div>
           </div>
           <ol ref={listRef} className={styles.steps}>
-            {products.map((product) => {
+            {products.map((product, index) => {
               const href = product.url ?? `/products/${product.slug}`;
               const label = product.url ? site.productsSection.visit : site.productsSection.learnMore;
               return (
-                <li key={product.slug} className={styles.step} data-story-step="">
-                  <div className={styles.panelVisual} aria-hidden="true">
-                    <ProductVisual art={product.art} />
+                <li
+                  key={product.slug}
+                  className={styles.step}
+                  data-story-step=""
+                  data-active={index === active ? "true" : "false"}
+                >
+                  <div className={styles.panelVisual} aria-hidden="true" style={{ "--vt": `vt-${product.slug}` } as CSSProperties}>
+                    <div className="scroll-shift" data-scroll-progress="">
+                      <ProductVisual art={product.art} />
+                    </div>
                   </div>
                   <StatusPill status={product.status} />
                   <h3>{product.name}</h3>

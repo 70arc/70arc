@@ -63,6 +63,39 @@
   --p: 0;
 }
 
+@supports (animation-timeline: view()) {
+  :global(html[data-motion="on"]) .rail {
+    view-timeline-name: --approach;
+    view-timeline-axis: block;
+  }
+
+  :global(html[data-motion="on"]) .fill {
+    transform: none;
+    transform-origin: top center;
+    animation: rail-y linear both;
+    animation-timeline: --approach;
+    animation-range: cover 15% cover 65%;
+  }
+}
+
+@keyframes rail-y {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes rail-x {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
 @media (min-width: 1024px) {
   .track {
     top: calc((var(--dot) - 1px) / 2);
@@ -76,6 +109,13 @@
   .fill {
     transform: scaleX(clamp(0, (var(--p, 1) - 0.15) / 0.35, 1));
     transform-origin: left center;
+  }
+
+  @supports (animation-timeline: view()) {
+    :global(html[data-motion="on"]) .fill {
+      transform-origin: left center;
+      animation-name: rail-x;
+    }
   }
 
   .steps {
@@ -96,7 +136,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fill {
+  .fill,
+  :global(html[data-motion="on"]) .fill {
     transform: none;
+    animation: none;
   }
 }

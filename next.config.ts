@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  experimental: {
+    viewTransition: true,
+  },
   images: {
     // Brand files are pre-sized. Sharp's install script did not run in this environment.
     unoptimized: true,

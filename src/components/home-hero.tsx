@@ -16,7 +16,7 @@ function HeroArc() {
   const baseline = 348;
   return (
     <svg className={styles.arc} viewBox="0 0 1200 320" fill="none" aria-hidden="true" data-arc="">
-      {arcs.map((arc, index) => (
+      {arcs.map((arc) => (
         <path
           key={arc.mid}
           pathLength={1}
@@ -25,7 +25,6 @@ function HeroArc() {
           strokeWidth="1.5"
           strokeLinecap="round"
           opacity={arc.opacity}
-          style={{ animationDelay: `${index * 70}ms` }}
         />
       ))}
     </svg>
@@ -37,23 +36,19 @@ export function HomeHero() {
     <section className={styles.hero} aria-labelledby="hero-title">
       <Container>
         <div className={styles.copy}>
-          <p className="eyebrow" data-reveal="" data-stagger="0">
-            {site.hero.eyebrow}
-          </p>
-          <h1 id="hero-title" tabIndex={-1} className={styles.title} data-reveal="" data-stagger="1">
+          <p className={`eyebrow ${styles.eyebrow}`}>{site.hero.eyebrow}</p>
+          <h1 id="hero-title" tabIndex={-1} className={styles.title}>
             {site.hero.title}
           </h1>
-          <p className={`lede ${styles.subhead}`} data-reveal="" data-stagger="2">
-            {site.hero.subhead}
-          </p>
-          <div className={styles.actions} data-reveal="" data-stagger="3">
+          <p className={`lede ${styles.subhead}`}>{site.hero.subhead}</p>
+          <div className={styles.actions}>
             <LinkButton href="/#products">{site.hero.primary}</LinkButton>
             <LinkButton href="/#approach" variant="text">
               {site.hero.secondary}
             </LinkButton>
           </div>
         </div>
-        <div className={styles.visualSlot} data-reveal="" data-stagger="4">
+        <div className={styles.visualSlot}>
           <div className={styles.visual} data-scroll-progress="">
             <HeroArc />
           </div>

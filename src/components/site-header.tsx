@@ -37,7 +37,7 @@ export function SiteHeader() {
     let frame = 0;
     const update = () => {
       frame = 0;
-      const next = window.scrollY > 0;
+      const next = window.scrollY > 8;
       setScrolled((current) => (current === next ? current : next));
     };
     const onScroll = () => {

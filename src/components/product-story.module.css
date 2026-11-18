@@ -28,6 +28,7 @@
 
 .panelVisual {
   width: 100%;
+  view-transition-name: var(--vt);
 }
 
 .step :global(.status-pill) {
@@ -47,6 +48,7 @@
   grid-area: 1 / 1;
   width: 100%;
   opacity: 0;
+  view-transition-name: none;
 }
 
 .stageVisual[data-on="true"] {
@@ -54,10 +56,38 @@
   z-index: 1;
 }
 
+.stageShift {
+  width: 100%;
+}
+
+.progress {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-8);
+  grid-row: 2;
+  padding-top: var(--space-16);
+}
+
+.progress span {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--ink);
+  opacity: 0.28;
+}
+
+.progress span[data-on="true"] {
+  opacity: 1;
+}
+
 :global(html[data-motion="on"]) .stageVisual {
   transition:
     opacity 600ms var(--ease-out),
     transform 600ms var(--ease-out);
+}
+
+:global(html[data-motion="on"]) .stageVisual[data-on="true"] {
+  transform: scale(1);
 }
 
 :global(html[data-motion="on"]) .stageVisual:not([data-on="true"]) {
@@ -108,12 +138,62 @@
 
   .panelVisual {
     display: none;
+    view-transition-name: none;
+  }
+
+  .stageVisual[data-on="true"] {
+    view-transition-name: var(--vt);
+  }
+
+  .step h3,
+  .step .tagline,
+  .step .summary {
+    color: var(--muted);
+    transition: color 600ms var(--ease-out);
+  }
+
+  .step[data-active="true"] h3,
+  .step[data-active="true"] .tagline {
+    color: var(--ink);
+  }
+
+  .step[data-active="true"] .summary {
+    color: var(--ink-2);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  :global(html[data-motion="on"]) .story {
+    view-timeline-name: --product-story;
+    view-timeline-axis: block;
+  }
+
+  :global(html[data-motion="on"]) .stageShift {
+    transform: none;
+    animation: stage-shift linear both;
+    animation-timeline: --product-story;
+    animation-range: contain 0% contain 100%;
+  }
+}
+
+@keyframes stage-shift {
+  from {
+    transform: translateY(10px);
+  }
+  to {
+    transform: translateY(-10px);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .stageVisual {
+  .stageVisual,
+  .stageVisual:not([data-on="true"]),
+  .stageShift,
+  .step h3,
+  .step .tagline,
+  .step .summary {
     transform: none;
     transition: none;
+    animation: none;
   }
 }

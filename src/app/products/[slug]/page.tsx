@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import { productBySlug, publishedProducts } from "@content/products";
 import { site } from "@content/site";
@@ -32,8 +33,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <h1 tabIndex={-1}>{product.name}</h1>
           <p className="lede">{product.tagline}</p>
         </div>
-        <div className={styles.visual} data-reveal="">
-          <ProductVisual art={product.art} />
+        <div className={styles.visual} data-reveal="" style={{ viewTransitionName: `vt-${product.slug}` } as CSSProperties}>
+          <div className="scroll-shift" data-scroll-progress="">
+            <ProductVisual art={product.art} />
+          </div>
         </div>
         <section className={styles.overview} aria-labelledby="overview-title">
           <h2 id="overview-title">{site.productsSection.overview}</h2>
