@@ -1,0 +1,109 @@
+.hero {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(100svh - var(--nav-height) - var(--space-48));
+  padding-block: var(--space-16);
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-16);
+  text-align: center;
+}
+
+.title {
+  max-width: 9em;
+}
+
+.subhead {
+  max-width: 28em;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8) var(--space-16);
+  margin-top: var(--space-8);
+}
+
+.visualSlot {
+  width: min(920px, 100%);
+  margin-top: var(--space-8);
+  margin-inline: auto;
+}
+
+.visual {
+  width: 100%;
+}
+
+.arc {
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+}
+
+.arc * {
+  vector-effect: non-scaling-stroke;
+}
+
+:global(html[data-motion="on"]) .arc path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+:global(html[data-motion="on"]) :global([data-shown="true"]) .arc path {
+  animation: draw var(--duration-scene) var(--ease-out) forwards;
+}
+
+:global(html[data-motion="on"]) .arc {
+  transform-origin: 50% 100%;
+  animation: drift 28s var(--ease-in-out) infinite alternate;
+}
+
+:global(html[data-motion="on"]) .visual {
+  --p: 0.5;
+  transform: translateY(calc((0.5 - var(--p)) * 28px));
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: rotate(-1.25deg);
+  }
+  to {
+    transform: rotate(1.25deg);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding-block: var(--space-24) var(--space-8);
+  }
+
+  .visualSlot {
+    margin-top: var(--space-16);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(html[data-motion="on"]) .arc,
+  :global(html[data-motion="on"]) .arc path,
+  :global(html[data-motion="on"]) .visual {
+    animation: none;
+    stroke-dashoffset: 0;
+    transform: none;
+  }
+}

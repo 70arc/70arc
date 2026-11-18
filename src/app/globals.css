@@ -136,6 +136,10 @@ a {
   text-underline-offset: 0.18em;
 }
 
+a:visited {
+  color: var(--accent);
+}
+
 h1,
 h2,
 h3,
@@ -332,6 +336,19 @@ p {
   .button-primary:hover {
     background: color-mix(in srgb, var(--accent) 88%, #ffffff);
   }
+}
+
+.button-primary:visited {
+  color: var(--on-accent);
+}
+
+.button-secondary:visited {
+  color: var(--ink);
+}
+
+.button-ghost:visited,
+.chevron-link:visited {
+  color: var(--accent);
 }
 
 .button:active {

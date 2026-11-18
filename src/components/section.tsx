@@ -18,15 +18,22 @@ export function Section({
   id,
   labelledBy,
   className,
+  progress = false,
 }: {
   children: ReactNode;
   id?: string;
   labelledBy?: string;
   className?: string;
+  progress?: boolean;
 }) {
   const classes = ["section", className].filter(Boolean).join(" ");
   return (
-    <section id={id} aria-labelledby={labelledBy} className={classes}>
+    <section
+      id={id}
+      aria-labelledby={labelledBy}
+      className={classes}
+      data-scroll-progress={progress ? "" : undefined}
+    >
       {children}
     </section>
   );

@@ -16,7 +16,7 @@ Use a slug with lowercase letters and hyphens. Art is `stack`, `grid`, or `explo
 1. Copy one product object in `content/products.ts`.
 2. Give it a new slug and the fields above.
 3. Set `published` to `true`.
-4. To send people to an outside address, add `url`. The card then says "Visit product". Without `url`, the card links to the product page.
+4. To send people to an outside address, add `url`. On the home page, that product then says "Visit product" and links to the address. Without `url`, it says "Learn more" and links to the product page. The products index always links to the product page. The product page shows "Visit product" only when `url` is set.
 
 ## Change a status
 

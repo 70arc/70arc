@@ -15,6 +15,6 @@ The pre-hydration script sets `data-motion="on"` only when `prefers-reduced-moti
 | Products panel and mobile sheet | Open and close | 240ms opacity, and height for the sheet | ease-out | Shown or hidden with no travel |
 | Page change | After the first load | No fade in this phase | — | Focus moves to `main h1`. Scroll reset is the browser default |
 
-Later phases add the hero arc draw, scroll-linked mission words and approach rail (CSS `animation-timeline` where supported, `--p` as the fallback), at most 40px of parallax, the sticky product crossfade, and a View Transitions fade that does not block navigation. Those must use the same tokens and must not start a second observer.
+Phase 2 wires the page motion with the same observer. `data-stagger` is copied to `--reveal-index` before a reveal starts. Mission words and the approach rail read `--p`. The hero visual also reads `--p` for a small vertical shift, and its arcs draw on once they are revealed. The sticky product stage crossfades with one observer inside that section. Phase 3 can replace the `--p` mapping with `animation-timeline` where supported, and can add the View Transitions fade. Do not start a second reveal observer.
 
 With `prefers-reduced-motion: reduce`, everything is shown at rest: no transforms, no scroll scrubbing, no ambient drift, and no transition animation.

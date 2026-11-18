@@ -35,6 +35,9 @@ export function MotionRoot() {
     );
 
     document.querySelectorAll("[data-reveal]:not([data-shown='true'])").forEach((node) => {
+      if (node instanceof HTMLElement && node.dataset.stagger) {
+        node.style.setProperty("--reveal-index", node.dataset.stagger);
+      }
       reveal.observe(node);
     });
 

@@ -86,3 +86,9 @@ Phase 1 foundation, 2026-11-19.
 - Muted `#6e6e73` on `#f5f5f7` is about 4.66:1. The other specified text pairs are higher.
 - Page bodies are placeholders. Home only renders the hero copy plus the products and approach headings so the nav anchors resolve. Sticky product story, mission scrub, principles, values, closing panel, and the designed product and company layouts are later phases.
 - `docs/motion-plan.md` describes the new tokens and what this phase actually runs.
+
+Phase 2 pages, 2026-11-19.
+
+- Home, products, product detail, company, and not-found now follow section 3. Strings come from `content/site.ts` and `content/products.ts`. No new runtime dependency.
+- Motion stays on the Phase 1 observer. `data-stagger` sets `--reveal-index`. Mission words, the approach rail, and the hero visual read `--p`. Hero arcs draw in once, then drift on a 28s cycle. The product stage crossfades in 600ms. Phase 3 can move the scroll effects to `animation-timeline` and add a View Transitions fade.
+- The hero is slightly shorter than `100svh` minus the nav so the arc band still fits under the announcement bar.

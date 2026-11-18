@@ -1,0 +1,35 @@
+.mission {
+  display: flex;
+  align-items: center;
+  min-height: calc(100svh - var(--nav-height));
+}
+
+.statement {
+  width: min(100%, 14em);
+  margin-inline: auto;
+  color: var(--ink);
+  font-size: var(--text-display-l);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.word {
+  opacity: 1;
+}
+
+:global(html[data-motion="on"]) .mission {
+  --p: 0;
+}
+
+:global(html[data-motion="on"]) .word {
+  opacity: clamp(0.35, calc(0.35 + (var(--p) * 2 * var(--n) - var(--i))), 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(html[data-motion="on"]) .word {
+    opacity: 1;
+  }
+}

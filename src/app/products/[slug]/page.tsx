@@ -6,6 +6,7 @@ import { ProductVisual } from "@/components/product-visual";
 import { Container, Section } from "@/components/section";
 import { StatusPill } from "@/components/status-pill";
 import { pageMeta } from "@/lib/seo";
+import styles from "./product.module.css";
 
 export function generateStaticParams() {
   return publishedProducts().map((product) => ({ slug: product.slug }));
@@ -26,22 +27,28 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   return (
     <Section>
       <Container>
-        <div className="stack">
-          <LinkButton href="/products" variant="text">
-            {site.productsSection.back}
-          </LinkButton>
+        <div className={styles.hero}>
           <StatusPill status={product.status} />
           <h1 tabIndex={-1}>{product.name}</h1>
           <p className="lede">{product.tagline}</p>
-          <ProductVisual art={product.art} title={product.name} />
-          <h2 className="title-m">{site.productsSection.overview}</h2>
-          <p className="measure">{product.summary}</p>
-          {product.url ? (
-            <LinkButton href={product.url} variant="secondary">
-              {site.productsSection.visit}
-            </LinkButton>
-          ) : null}
         </div>
+        <div className={styles.visual} data-reveal="">
+          <ProductVisual art={product.art} />
+        </div>
+        <section className={styles.overview} aria-labelledby="overview-title">
+          <h2 id="overview-title">{site.productsSection.overview}</h2>
+          <p>{product.summary}</p>
+          <div className={styles.links}>
+            <LinkButton href="/products" variant="text">
+              {site.productsSection.back}
+            </LinkButton>
+            {product.url ? (
+              <LinkButton href={product.url} variant="secondary">
+                {site.productsSection.visit}
+              </LinkButton>
+            ) : null}
+          </div>
+        </section>
       </Container>
     </Section>
   );
