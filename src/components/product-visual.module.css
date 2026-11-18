@@ -1,0 +1,9 @@
+.visual {
+  width: 100%;
+  height: auto;
+  color: var(--ink);
+}
+
+.visual * {
+  vector-effect: non-scaling-stroke;
+}

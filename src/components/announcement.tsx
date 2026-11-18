@@ -2,24 +2,26 @@
 
 import { useState } from "react";
 import { announcementKey, site } from "@content/site";
+import styles from "./announcement.module.css";
 
 export function Announcement() {
-  const [visible, setVisible] = useState(true);
-  if (!visible) return null;
+  const [open, setOpen] = useState(true);
+  if (!open) return null;
 
   return (
-    <div className="announcement">
+    <div className={styles.bar} data-announcement="">
       <p>{site.announcement}</p>
       <button
+        className={styles.dismiss}
         type="button"
         onClick={() => {
           try {
             localStorage.setItem(announcementKey, "dismissed");
           } catch {
-            /* Storage can be unavailable. The bar still closes for this view. */
+            /* Storage can be blocked. The bar still closes for this view. */
           }
           document.documentElement.dataset.announcement = "off";
-          setVisible(false);
+          setOpen(false);
         }}
       >
         {site.dismiss}

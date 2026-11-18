@@ -1,31 +1,18 @@
 import type { Metadata } from "next";
-import { Inter, Newsreader } from "next/font/google";
+import { Inter } from "next/font/google";
 import { Announcement } from "@/components/announcement";
 import { MotionRoot } from "@/components/motion-root";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { motionVars } from "@/lib/motion";
-import { site } from "@content/site";
-import { announcementKey } from "@content/site";
+import { announcementKey, site } from "@content/site";
 import "./globals.css";
 
-const display = Newsreader({
+const inter = Inter({
   subsets: ["latin"],
-  weight: "400",
   display: "swap",
-  variable: "--font-display",
-  fallback: ["Georgia", "Times New Roman", "serif"],
   adjustFontFallback: true,
-});
-
-const body = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  display: "swap",
-  variable: "--font-body",
-  fallback: ["Segoe UI", "sans-serif"],
-  adjustFontFallback: true,
-  preload: false,
+  variable: "--font-inter",
+  fallback: ["Segoe UI", "system-ui", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -58,7 +45,7 @@ const jsonLd = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`} style={motionVars}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <meta property="og:image" content="/og.jpg" />
         <meta property="og:image:width" content="1200" />
@@ -72,11 +59,15 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             __html: `try{if(localStorage.getItem("${announcementKey}")==="dismissed")document.documentElement.dataset.announcement="off";if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.dataset.motion="on"}catch(e){}`,
           }}
         />
-        <a className="skip" href="#content">{site.skip}</a>
+        <a className="skip-link" href="#content">
+          {site.skip}
+        </a>
         <Announcement />
         <SiteHeader />
         <MotionRoot />
-        <main id="content" tabIndex={-1}>{children}</main>
+        <main id="content" tabIndex={-1}>
+          {children}
+        </main>
         <SiteFooter />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </body>

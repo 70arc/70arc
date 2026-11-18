@@ -13,12 +13,20 @@ export const site = {
     close: "Close",
     viewAll: "View all products",
     home: "70arc, home",
+    primary: "Primary",
+    mobile: "Mobile",
   },
   hero: {
     eyebrow: "70arc",
     title: "Practical AI, built into products people use.",
     subhead: "70arc designs, builds and publishes AI products. We focus on clarity, usefulness and trust.",
     primary: "Explore products",
+    secondary: "Our approach",
+  },
+  cta: {
+    title: "See what we're building.",
+    products: "Explore products",
+    company: "About 70arc",
   },
   mission: "We build AI products that feel simple, work reliably and earn trust.",
   productsSection: {

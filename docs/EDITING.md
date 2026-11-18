@@ -29,3 +29,5 @@ Set `published` to `false`. It leaves the menu, the cards, the footer, the sitem
 ## Change other sentences
 
 Edit the matching string in `content/site.ts`. Do not add claims that were not supplied for the company.
+
+Nav labels live under `nav`, including `primary` and `mobile` for the navigation landmarks. The hero's second link is `hero.secondary`. The closing panel is `cta` (`title`, `products`, `company`). These are interface labels. Do not add contact details, social links, or claims that are not already in this file.

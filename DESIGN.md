@@ -77,3 +77,12 @@ Lighthouse mobile target: Performance >= 90, Accessibility 100, Best Practices 1
 `npm run lint`, `npm run typecheck`, `npm run build` with zero errors and no new warnings. Don't add test frameworks. Don't modify `.grok-logs/`, `.git`, `package-lock.json` (unless a justified dependency is added), `wrangler.jsonc`. Do not run git commands that change history; do not commit, push, deploy or run wrangler. Do not leave dev servers running.
 
 ## DESIGN-NOTES (builder fills in: decisions, any dependency justification, known gaps)
+
+Phase 1 foundation, 2026-11-19.
+
+- No new runtime dependency. Motion is one shared `IntersectionObserver` plus one `requestAnimationFrame`-throttled scroll listener in `MotionRoot`. Both stay off unless the pre-hydration script set `data-motion="on"`.
+- `template.tsx` was removed in this phase, so there is no page-fade yet. After a client navigation, `MotionRoot` moves focus to `main h1`. A View Transitions fade is still to do.
+- Light `--accent-hover` stays `#0077ed`, as specified. White text on that blue is about 4.32:1, and the blue as text on white is the same, so it is not used for labels. It colours the secondary button border on hover. The filled button darkens slightly in light mode and lightens slightly in dark mode so the label stays above 4.5:1. Dark filled buttons use black text because white on `#2997ff` is about 3.02:1. Dark hover is a lighter mix of `#2997ff`; the brief did not give a separate dark hover hex.
+- Muted `#6e6e73` on `#f5f5f7` is about 4.66:1. The other specified text pairs are higher.
+- Page bodies are placeholders. Home only renders the hero copy plus the products and approach headings so the nav anchors resolve. Sticky product story, mission scrub, principles, values, closing panel, and the designed product and company layouts are later phases.
+- `docs/motion-plan.md` describes the new tokens and what this phase actually runs.

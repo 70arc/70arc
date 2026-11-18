@@ -1,20 +1,20 @@
 # Motion plan
 
-Easing for reveals and UI: cubic-bezier(0.22, 1, 0.36, 1). Loops use ease-in-out. Durations: micro 150ms, UI 250ms, reveal 800ms, scene 1200ms, dropdown 200ms, page 300ms. Stagger 80ms. Only transform, opacity, and clip-path.
+Apple-style and purposeful. Motion explains hierarchy and continuity. Nothing loops except an extremely slow ambient drift on the hero arcs (at least a 20s period), which later phases add. Animate only `transform`, `opacity`, `clip-path`, and SVG `stroke-dashoffset`. No layout-shifting animation. Space is reserved up front.
 
-The mission statement never fades below 50% opacity. At 30% opacity, ink on the sunken background is about 1.94:1. At 50% it is about 3.36:1, which meets WCAG AA for this large text.
+Easing: `--ease-out: cubic-bezier(0.22, 1, 0.36, 1)`, `--ease-in-out: cubic-bezier(0.65, 0, 0.35, 1)`, press `--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1)`. Durations: micro 160ms, UI 240ms, reveal 900ms, scene 1200ms. Stagger 70ms.
+
+The pre-hydration script sets `data-motion="on"` only when `prefers-reduced-motion` is not reduce. Content stays visible without that attribute. `MotionRoot` does nothing unless the attribute is present.
 
 | Element | Trigger | Duration | Easing | Reduced motion |
 |---|---|---|---|---|
-| Navigation | Load | 250ms fade | standard | Shown at rest |
-| Hero eyebrow, subhead, button | Load | 800ms, stagger 80ms | standard | Shown at rest |
-| Hero headline | Load | 800ms, translate only so the text stays paintable | standard | Shown at rest |
-| Hero cube | Load, then float | Faces slide 24px over 800ms, stagger 80ms, then float 8s by 6px | standard; float ease-in-out | Static cube |
-| Sections | Enter the viewport once | 800ms, rise 24px | standard | Shown at rest |
-| Mission words | Scroll across the middle of the viewport | Tied to scroll | linear scrub | Full opacity |
-| Approach dot | Scroll through the section | Tied to scroll | linear | Dot stays on the first step |
-| Dark section edge | Always | Static blend over 96px | none | Same blend |
-| Dropdown | Open and close | 200ms | standard | Shown or hidden with no travel |
-| Cards | Hover | 250ms | standard | No illustration travel; border can still change |
-| Page change | Navigation after the first load | 300ms opacity | standard | No fade; scroll still resets and focus moves to the heading |
-| Buttons | Hover and focus | 150ms | standard | No movement; clay focus ring remains |
+| `[data-reveal]` | 15% visible, once, one shared IntersectionObserver | 900ms, rise 24px, optional `--reveal-index` stagger | ease-out | Shown at rest. Hidden only while `html[data-motion="on"]` and not yet shown |
+| `[data-scroll-progress]` | Scroll, rAF-throttled, writes `--p` from 0 to 1. Skips elements outside the viewport | Tied to scroll | Linear progress value | Listener does not run |
+| Buttons | Hover scale 1.02, press scale 0.97 | 240ms / 160ms | ease-out, spring on press | No scale. Colour can still change. Hover only under `(hover: hover)` |
+| Chevron link | Hover, icon shifts 3px | 240ms | ease-out | Icon stays still |
+| Products panel and mobile sheet | Open and close | 240ms opacity, and height for the sheet | ease-out | Shown or hidden with no travel |
+| Page change | After the first load | No fade in this phase | — | Focus moves to `main h1`. Scroll reset is the browser default |
+
+Later phases add the hero arc draw, scroll-linked mission words and approach rail (CSS `animation-timeline` where supported, `--p` as the fallback), at most 40px of parallax, the sticky product crossfade, and a View Transitions fade that does not block navigation. Those must use the same tokens and must not start a second observer.
+
+With `prefers-reduced-motion: reduce`, everything is shown at rest: no transforms, no scroll scrubbing, no ambient drift, and no transition animation.
