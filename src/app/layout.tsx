@@ -6,6 +6,20 @@ import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { announcementKey, site, xHandle } from "@content/site";
 import "./globals.css";
+// Page CSS is part of the root layout stylesheet. A separate route chunk is
+// preloaded on pages that do not render it (contact, not-found) and Chrome warns.
+import "@/app/company/company.module.css";
+import "@/app/products/products.module.css";
+import "@/app/products/[slug]/product.module.css";
+import "@/components/approach.module.css";
+import "@/components/closing-cta.module.css";
+import "@/components/home-hero.module.css";
+import "@/components/mission-statement.module.css";
+import "@/components/principles.module.css";
+import "@/components/product-story.module.css";
+import "@/components/product-visual.module.css";
+import "@/components/section-heading.module.css";
+import "@/components/values-section.module.css";
 
 const inter = Inter({
   subsets: ["latin"],
