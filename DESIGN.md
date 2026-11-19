@@ -115,3 +115,10 @@ Phase 4 polish, 2026-11-19.
   7. Button padding was 22px and the chevron gap was 6px. Both use the spacing tokens.
 - Removed the unused ghost button, the unused layout utilities (`.stack`, `.cluster`, `.center`, `.grid`, `.measure`, `.container-wide`), and `not-found.module.css`. `--container-wide` stays, because the header uses it.
 - No new dependency. Known gap: placeholders are still placeholders. The sticky product story still gives each step a viewport of scroll, which is the story, and it reads as open space if you look at the full page at once.
+
+Phase 5 socials, contact, motion, 2026-11-19.
+
+- The owner supplied four profiles and a country. Those facts live in `content/site.ts` (`social`, `contact`). No email, phone, city, or street. Organization JSON-LD omits `url` because there is no site-url constant. `sameAs` lists the four profiles. The address is only `addressCountry: IN`.
+- Header height eases once after 8px of scroll. It is not a per-frame scroll animation. The logo mark uses transform. Everything else new is transform, opacity, or clip-path. No new dependency.
+- The home product steps are the height of their text, with 32px above and 48px below, instead of a full viewport. The sticky crossfade still runs while that column is taller than the visual. Copy is unchanged.
+- Section headings and page intros share one stack: 12px gap, 16px from 1024px, and 48px then 64px before the next block. Company keeps the intro section's bottom padding at zero so it does not double the next section's padding.

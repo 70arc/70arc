@@ -28,7 +28,7 @@
   align-items: flex-start;
   gap: var(--space-16);
   width: min(100%, var(--measure));
-  margin: var(--space-96) auto 0;
+  margin: var(--space-64) auto 0;
 }
 
 .overview h2 {

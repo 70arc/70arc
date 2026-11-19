@@ -17,7 +17,7 @@ function classes(variant: Variant, className?: string) {
 function content(variant: Variant, children: ReactNode) {
   return (
     <>
-      {children}
+      {variant === "text" ? <span className="line-target">{children}</span> : children}
       {variant === "text" ? <Icon name="chevron" /> : null}
     </>
   );

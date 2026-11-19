@@ -13,6 +13,6 @@
 @media (min-width: 1024px) {
   .heading {
     gap: var(--space-16);
-    margin-bottom: var(--space-96);
+    margin-bottom: var(--space-64);
   }
 }

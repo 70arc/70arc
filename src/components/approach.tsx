@@ -5,7 +5,7 @@ import styles from "./approach.module.css";
 
 export function Approach() {
   return (
-    <Section labelledBy="approach-title">
+    <Section labelledBy="approach-title" marker="approach">
       <Container>
         <SectionHeading
           id="approach"

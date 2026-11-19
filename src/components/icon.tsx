@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-type IconName = "chevron" | "chevron-down" | "menu" | "close";
+type IconName = "chevron" | "chevron-down" | "menu" | "close" | "arrow-up-right";
 
 const paths: Record<IconName, ReactNode> = {
   chevron: <path d="M9 6l6 6-6 6" />,
@@ -15,6 +15,12 @@ const paths: Record<IconName, ReactNode> = {
     <>
       <path d="M6 6l12 12" />
       <path d="M18 6L6 18" />
+    </>
+  ),
+  "arrow-up-right": (
+    <>
+      <path d="M7 17L17 7" />
+      <path d="M9 7h8v8" />
     </>
   ),
 };

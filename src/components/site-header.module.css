@@ -6,6 +6,31 @@
   background: color-mix(in srgb, var(--bg) 72%, transparent);
   backdrop-filter: saturate(180%) blur(20px);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
+  transition: height var(--duration-ui) var(--ease-out);
+}
+
+.header[data-scrolled="true"] {
+  height: var(--nav-compact);
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity var(--duration-micro) var(--ease-out),
+    visibility var(--duration-micro);
+}
+
+.backdrop[data-open="true"] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition-duration: var(--duration-ui);
 }
 
 .header::after {
@@ -57,13 +82,24 @@
 }
 
 .bar {
+  position: relative;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: var(--nav-height);
+  height: 100%;
   width: min(100% - (2 * var(--gutter)), var(--container-wide));
   margin-inline: auto;
   gap: var(--space-16);
+}
+
+.bar > a img {
+  transform-origin: left center;
+  transition: transform var(--duration-ui) var(--ease-out);
+}
+
+.header[data-scrolled="true"] .bar > a img {
+  transform: scale(0.86);
 }
 
 .desktop {
@@ -74,6 +110,7 @@
 
 .item,
 .menuButton {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -91,9 +128,24 @@
   text-decoration: none;
 }
 
+.item[data-section="true"]::after,
+.item[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  bottom: 7px;
+  left: 12px;
+  height: 2px;
+  border-radius: 1px;
+  background: var(--ink);
+}
+
 .item[aria-current="page"] {
   color: var(--accent);
-  box-shadow: inset 0 -1px 0 var(--accent);
+}
+
+.item[aria-current="page"]::after {
+  background: var(--accent);
 }
 
 .item svg {
@@ -183,6 +235,7 @@
 
 .sheet {
   position: absolute;
+  z-index: 1;
   top: 100%;
   left: 0;
   right: 0;
@@ -212,34 +265,7 @@
 
 :global(html[data-motion="on"]) .sheet[data-open="true"] a {
   animation: sheet-link var(--duration-ui) var(--ease-out) both;
-}
-
-:global(html[data-motion="on"]) .sheet[data-open="true"] a:nth-of-type(2) {
-  animation-delay: var(--stagger);
-}
-
-:global(html[data-motion="on"]) .sheet[data-open="true"] a:nth-of-type(3) {
-  animation-delay: calc(var(--stagger) * 2);
-}
-
-:global(html[data-motion="on"]) .sheet[data-open="true"] a:nth-of-type(4) {
-  animation-delay: calc(var(--stagger) * 3);
-}
-
-:global(html[data-motion="on"]) .sheet[data-open="true"] a:nth-of-type(5) {
-  animation-delay: calc(var(--stagger) * 4);
-}
-
-:global(html[data-motion="on"]) .sheet[data-open="true"] a:nth-of-type(6) {
-  animation-delay: calc(var(--stagger) * 5);
-}
-
-:global(html[data-motion="on"]) .sheet[data-open="true"] a:nth-of-type(7) {
-  animation-delay: calc(var(--stagger) * 6);
-}
-
-:global(html[data-motion="on"]) .sheet[data-open="true"] a:nth-of-type(8) {
-  animation-delay: calc(var(--stagger) * 7);
+  animation-delay: calc(var(--enter, 0) * var(--stagger));
 }
 
 @keyframes sheet-link {
@@ -288,6 +314,15 @@
   padding-top: var(--space-16);
 }
 
+.groupLabel[data-section="true"] {
+  color: var(--ink);
+  box-shadow: inset 2px 0 0 var(--ink);
+}
+
+.mobileLink[data-section="true"] {
+  box-shadow: inset 0 -2px 0 var(--ink);
+}
+
 .subLink {
   font-size: 17px;
   font-weight: 500;
@@ -307,8 +342,12 @@
   .header::after,
   .panel,
   .sheet,
-  .sheet a {
+  .sheet a,
+  .backdrop,
+  .bar > a img,
+  .header[data-scrolled="true"] .bar > a img {
     animation: none;
+    transition: none;
     transform: none;
   }
 }

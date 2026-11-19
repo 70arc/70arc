@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -26,11 +27,13 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState(false);
   const [productsOpen, setProductsOpen] = useState(false);
+  const [section, setSection] = useState("");
 
   if (path !== pathname) {
     setPath(pathname);
     setMenu(false);
     setProductsOpen(false);
+    setSection("");
   }
 
   useEffect(() => {
@@ -51,6 +54,33 @@ export function SiteHeader() {
       if (frame !== 0) window.cancelAnimationFrame(frame);
     };
   }, []);
+
+  useEffect(() => {
+    if (pathname !== "/") return;
+    const nodes = [...document.querySelectorAll<HTMLElement>("[data-nav-section]")];
+    if (nodes.length === 0) return;
+    const heights = new Map<string, number>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const name = entry.target.getAttribute("data-nav-section") ?? "";
+          heights.set(name, entry.isIntersecting ? entry.intersectionRect.height : 0);
+        }
+        let best = "";
+        let bestHeight = 0;
+        for (const [name, height] of heights) {
+          if (height > bestHeight) {
+            bestHeight = height;
+            best = name;
+          }
+        }
+        setSection((current) => (current === best ? current : best));
+      },
+      { rootMargin: "-20% 0px -60% 0px", threshold: [0, 0.05, 0.15, 0.3, 0.5] },
+    );
+    for (const node of nodes) observer.observe(node);
+    return () => observer.disconnect();
+  }, [pathname]);
 
   useEffect(() => {
     const onResize = () => {
@@ -141,6 +171,8 @@ export function SiteHeader() {
   }, [productsOpen]);
 
   return (
+    <>
+    <div className={styles.backdrop} data-open={menu ? "true" : "false"} aria-hidden="true" />
     <header
       ref={headerRef}
       className={`${styles.header} chrome`}
@@ -161,6 +193,7 @@ export function SiteHeader() {
               type="button"
               aria-expanded={productsOpen}
               aria-controls="product-menu"
+              data-section={section === "products" ? "true" : undefined}
               onClick={() => setProductsOpen((open) => !open)}
             >
               {site.nav.products}
@@ -202,11 +235,14 @@ export function SiteHeader() {
               </div>
             </div>
           </div>
-          <Link className={styles.item} href="/#approach">
+          <Link className={styles.item} href="/#approach" data-section={section === "approach" ? "true" : undefined}>
             {site.nav.approach}
           </Link>
           <Link className={styles.item} href="/company" aria-current={pageCurrent(pathname, "/company")}>
             {site.nav.company}
+          </Link>
+          <Link className={styles.item} href="/contact" aria-current={pageCurrent(pathname, "/contact")}>
+            {site.nav.contact}
           </Link>
         </nav>
         <button
@@ -237,8 +273,10 @@ export function SiteHeader() {
       >
         <div className={styles.sheetInner}>
           <nav className={styles.mobileNav} aria-label={site.nav.mobile}>
-            <p className={`caption ${styles.groupLabel}`}>{site.nav.products}</p>
-            {products.map((product) => {
+            <p className={`caption ${styles.groupLabel}`} data-section={section === "products" ? "true" : undefined}>
+              {site.nav.products}
+            </p>
+            {products.map((product, index) => {
               const href = `/products/${product.slug}`;
               return (
                 <Link
@@ -246,6 +284,7 @@ export function SiteHeader() {
                   className={styles.subLink}
                   href={href}
                   aria-current={pageCurrent(pathname, href)}
+                  style={{ "--enter": index } as CSSProperties}
                   onClick={() => setMenu(false)}
                 >
                   <span>{product.name}</span>
@@ -253,18 +292,46 @@ export function SiteHeader() {
                 </Link>
               );
             })}
-            <Link className={styles.subLink} href="/products" aria-current={pageCurrent(pathname, "/products")} onClick={() => setMenu(false)}>
+            <Link
+              className={styles.subLink}
+              href="/products"
+              aria-current={pageCurrent(pathname, "/products")}
+              style={{ "--enter": products.length } as CSSProperties}
+              onClick={() => setMenu(false)}
+            >
               {site.nav.viewAll}
             </Link>
-            <Link className={styles.mobileLink} href="/#approach" onClick={() => setMenu(false)}>
+            <Link
+              className={styles.mobileLink}
+              href="/#approach"
+              data-section={section === "approach" ? "true" : undefined}
+              style={{ "--enter": products.length + 1 } as CSSProperties}
+              onClick={() => setMenu(false)}
+            >
               {site.nav.approach}
             </Link>
-            <Link className={styles.mobileLink} href="/company" aria-current={pageCurrent(pathname, "/company")} onClick={() => setMenu(false)}>
+            <Link
+              className={styles.mobileLink}
+              href="/company"
+              aria-current={pageCurrent(pathname, "/company")}
+              style={{ "--enter": products.length + 2 } as CSSProperties}
+              onClick={() => setMenu(false)}
+            >
               {site.nav.company}
+            </Link>
+            <Link
+              className={styles.mobileLink}
+              href="/contact"
+              aria-current={pageCurrent(pathname, "/contact")}
+              style={{ "--enter": products.length + 3 } as CSSProperties}
+              onClick={() => setMenu(false)}
+            >
+              {site.nav.contact}
             </Link>
           </nav>
         </div>
       </div>
     </header>
+    </>
   );
 }

@@ -9,6 +9,7 @@ export const site = {
     products: "Products",
     approach: "Approach",
     company: "Company",
+    contact: "Contact",
     menu: "Menu",
     close: "Close",
     viewAll: "View all products",
@@ -26,6 +27,7 @@ export const site = {
   cta: {
     title: "See what we're building.",
     products: "Explore products",
+    contact: "Get in touch",
     company: "About 70arc",
   },
   mission: "We build AI products that feel simple, work reliably and earn trust.",
@@ -98,6 +100,58 @@ export const site = {
     company: "Company",
     rights: "All rights reserved.",
   },
+  contact: {
+    title: "Get in touch.",
+    description: "Profiles and location for 70arc.",
+    intro: "70arc is on these profiles.",
+    locationLabel: "Location",
+    based: "Based in India",
+    place: "India",
+    countryCode: "IN",
+  },
+  social: [
+    {
+      id: "linkedin",
+      icon: "linkedin",
+      label: "LinkedIn",
+      handle: "",
+      href: "https://www.linkedin.com/company/70arc/",
+      aria: "70arc on LinkedIn (opens in a new tab)",
+      mark: "",
+    },
+    {
+      id: "x",
+      icon: "x",
+      label: "X",
+      handle: "@70arc_hq",
+      href: "https://x.com/70arc_hq",
+      aria: "70arc on X (opens in a new tab)",
+      mark: "",
+    },
+    {
+      id: "instagram",
+      icon: "instagram",
+      label: "Instagram",
+      handle: "70arc.hq",
+      href: "https://www.instagram.com/70arc.hq/",
+      aria: "70arc on Instagram (opens in a new tab)",
+      mark: "",
+    },
+    {
+      id: "instagram-tv",
+      icon: "instagram",
+      label: "70arc.tv on Instagram",
+      handle: "70arc.tv",
+      href: "https://www.instagram.com/70arc.tv/",
+      aria: "70arc.tv on Instagram (opens in a new tab)",
+      mark: "tv",
+    },
+  ],
 } as const;
+
+export function xHandle() {
+  const entry = site.social.find((item) => item.id === "x");
+  return entry?.handle ?? "";
+}
 
 export const announcementKey = "70arc-announcement";

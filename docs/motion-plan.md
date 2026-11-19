@@ -26,8 +26,16 @@ Scroll-linked effects use `animation-timeline: view()` or `scroll()` inside `@su
 | Products panel | Open / close | 240ms open, 160ms close. Opacity, 8px, scale 0.98 | ease-out | Shown or hidden with no travel |
 | Mobile sheet | Open / close | Sheet slides and fades (240ms open, 160ms close). Links stagger 70ms | ease-out | Shown or hidden with no travel |
 | Nav hairline | After 8px of scroll | 240ms fade, or `scroll()` where supported | ease-out / linear | Appears with no fade |
+| Header height | Once, after 8px of scroll. Not tied to scroll progress | 52px to 44px, or 56px to 48px, over 240ms. One layout change so the bar can yield space. The logo mark scales to 0.86 with transform | ease-out | Height snaps. Logo stays full size |
+| Home nav section | Products or Approach crosses the upper band on `/` | No motion. An ink underline. `aria-current` stays for real page matches only | — | Same indication |
+| Section reveal | 15% visible, once | Same rise as `[data-reveal]`. Transform uses `--ease-reveal` (a small settle). Opacity stays on ease-out. Stagger 70ms | reveal / ease-out | Shown at rest |
+| Text link underline | Hover or keyboard focus on footer links and chevron links | 240ms `scaleX` from the left | ease-out | Line appears at once, with `clip-path`, and no scale |
+| Social and contact links | Hover on a fine pointer, press | Social: background and scale 1.02, press 0.97. Contact row: background, arrow shifts 2px, press scale 0.99 | ease-out, spring on press | No scale, no arrow travel. Background can still change |
+| Mobile backdrop | Menu open / close | Opacity fade, 240ms open, 160ms close. The sheet still slides. Link entrance uses `--enter` times 70ms | ease-out | Backdrop and sheet appear or hide with no travel. Focus still returns to the menu button |
 | Page change | Client navigation where `startViewTransition` exists | 300ms root crossfade. `view-transition-name: vt-{slug}` from a card or story visual to the product hero | ease-in-out on the root | No view transition. Focus still moves to `main h1` |
 
 `experimental.viewTransition` is on in `next.config.ts`. Next 16.1 accepts the flag and does not run App Router navigations inside a view transition by itself, so `MotionRoot` calls `document.startViewTransition` around same-origin client navigations. Browsers without the API navigate normally. `@view-transition { navigation: auto }` covers full page loads. Hover styles sit under `@media (hover: hover) and (pointer: fine)`.
 
-With `prefers-reduced-motion: reduce`, everything is shown at rest: no transforms, no scroll scrubbing, no ambient drift, and no transition animation.
+`scroll-behavior: smooth` is on the document. Headings and any element with an `id` use `scroll-margin-top: var(--nav-height)` (the taller header), so an anchor is not hidden under the sticky bar. Reduced motion sets scroll behavior back to `auto`.
+
+With `prefers-reduced-motion: reduce`, everything is shown at rest: no transforms, no scroll scrubbing, no ambient drift, and no transition animation. The header height change is instant. Underlines, the logo, buttons, cards, and social links do not scale.

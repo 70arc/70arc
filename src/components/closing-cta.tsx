@@ -11,6 +11,9 @@ export function ClosingCta() {
           <h2 id="cta-title">{site.cta.title}</h2>
           <div className={styles.actions}>
             <LinkButton href="/products">{site.cta.products}</LinkButton>
+            <LinkButton href="/contact" variant="secondary">
+              {site.cta.contact}
+            </LinkButton>
             <LinkButton href="/company" variant="secondary">
               {site.cta.company}
             </LinkButton>

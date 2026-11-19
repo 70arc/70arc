@@ -11,12 +11,14 @@ export function Section({
   labelledBy,
   className,
   progress = false,
+  marker,
 }: {
   children: ReactNode;
   id?: string;
   labelledBy?: string;
   className?: string;
   progress?: boolean;
+  marker?: string;
 }) {
   const classes = ["section", className].filter(Boolean).join(" ");
   return (
@@ -25,6 +27,7 @@ export function Section({
       aria-labelledby={labelledBy}
       className={classes}
       data-scroll-progress={progress ? "" : undefined}
+      data-nav-section={marker}
     >
       {children}
     </section>

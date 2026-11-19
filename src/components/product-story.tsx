@@ -43,7 +43,7 @@ export function ProductStory() {
   }, []);
 
   return (
-    <Section labelledBy="products-title">
+    <Section labelledBy="products-title" marker="products">
       <Container>
         <SectionHeading
           id="products"

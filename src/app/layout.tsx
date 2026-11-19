@@ -4,7 +4,7 @@ import { Announcement } from "@/components/announcement";
 import { MotionRoot } from "@/components/motion-root";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { announcementKey, site } from "@content/site";
+import { announcementKey, site, xHandle } from "@content/site";
 import "./globals.css";
 
 const inter = Inter({
@@ -31,6 +31,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    site: xHandle(),
+    creator: xHandle(),
     title: site.title,
     description: site.description,
   },
@@ -41,6 +43,12 @@ const jsonLd = {
   "@type": "Organization",
   name: site.name,
   description: site.description,
+  logo: "/brand/logo-transparent.png",
+  sameAs: site.social.map((item) => item.href),
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: site.contact.countryCode,
+  },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

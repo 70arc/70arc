@@ -30,4 +30,18 @@ Set `published` to `false`. It leaves the menu, the cards, the footer, the sitem
 
 Edit the matching string in `content/site.ts`. Do not add claims that were not supplied for the company.
 
-Nav labels live under `nav`, including `primary` and `mobile` for the navigation landmarks. The hero's second link is `hero.secondary`. The closing panel is `cta` (`title`, `products`, `company`). These are interface labels. Do not add contact details, social links, or claims that are not already in this file.
+Nav labels live under `nav`, including `primary` and `mobile` for the navigation landmarks, and `contact` for the Contact item. The hero's second link is `hero.secondary`. The closing panel is `cta` (`title`, `products`, `contact`, `company`). These are interface labels. Do not add claims that are not already in this file.
+
+## Change social profiles
+
+Edit the `social` array in `content/site.ts`. Each entry has `label`, `handle`, `href`, `icon` (`linkedin`, `x`, or `instagram`), `aria` (the link name, including that it opens in a new tab), and `mark` (short text beside the icon in the footer; leave it empty when the icon is enough).
+
+The footer icon row, the contact page, and the organization `sameAs` list all read this array. Keep four profiles unless the company actually changes them. Do not add an email address or a phone number.
+
+## Change the location
+
+`contact.place` is the footer location ("India"). `contact.based` is the line on the contact page ("Based in India"). `contact.countryCode` is the organization address country (`IN`). Do not add a city, street, or office.
+
+## Contact page
+
+The page is `/contact`. Its title, description, intro, and location labels are the `contact` object in `content/site.ts`. The header and the footer Company column use `nav.contact`. The home closing panel uses `cta.contact`.

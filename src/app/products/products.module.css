@@ -1,15 +1,8 @@
-.intro {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-24);
-}
-
 .grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-16);
-  margin: var(--space-64) 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -60,7 +53,6 @@
   .grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--space-24);
-    margin-top: var(--space-96);
   }
 }
 
@@ -93,11 +85,29 @@
   .card:hover :global(.chevron-link) svg {
     transform: translateX(2px);
   }
+
+  .card:hover :global(.line-target)::after {
+    transform: scaleX(1);
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .card:active {
     transform: scale(0.97);
     transition: transform var(--duration-micro) var(--ease-spring);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card:active,
+  .card:hover .visual :global(svg),
+  .card:hover :global(.chevron-link) svg,
+  .card:hover :global(.line-target)::after {
+    transform: none;
+  }
+
+  .card:hover :global(.line-target)::after {
+    clip-path: inset(0 0 0 0);
   }
 }

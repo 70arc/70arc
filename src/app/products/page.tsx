@@ -18,7 +18,7 @@ export default function ProductsPage() {
   return (
     <Section>
       <Container>
-        <header className={styles.intro}>
+        <header className="page-intro">
           <h1 tabIndex={-1} data-reveal="">
             {site.productsSection.indexTitle}
           </h1>
@@ -39,7 +39,9 @@ export default function ProductsPage() {
                 <h2>{product.name}</h2>
                 <p className={styles.tagline}>{product.tagline}</p>
                 <span className="chevron-link">
-                  <ProductLinkText name={product.name} />
+                  <span className="line-target">
+                    <ProductLinkText name={product.name} />
+                  </span>
                   <Icon name="chevron" />
                 </span>
               </Link>
